@@ -1,0 +1,7 @@
+{
+  "name": "swabri-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Static portfolio page plus the contact-form email function in api/contact.js.",
+  "engines": { "node": ">=18" }
+}

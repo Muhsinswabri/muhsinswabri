@@ -1,0 +1,5 @@
+# Kept in the repository, not needed on the live site.
+tools/
+images/swabri-avatar-source.webp
+README.md
+.env.example

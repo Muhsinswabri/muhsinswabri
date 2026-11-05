@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Muhsin Swabri – Portfolio</title>
+<meta name="description" content="Muhsin Swabri: software developer working across full-stack development, AI automation, video editing, graphic design and digital marketing." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #050505;
+    --text: #e9e9e9;
+    --muted: #9a9a9a;
+    --line: rgba(255, 255, 255, 0.55);
+    --grad: linear-gradient(90deg, #6d28ff 0%, #c21bd0 45%, #ff3d8b 70%, #ff8a3d 100%);
+    --silver: linear-gradient(180deg, #ffffff 0%, #e6e6e6 30%, #a9a9a9 62%, #6f6f6f 100%);
+    --display: "Archivo Black", "Arial Black", system-ui, sans-serif;
+    --body: "Archivo", system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- shared ---------- */
+  .silver {
+    background: var(--silver);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: var(--display);
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+  }
+
+  /* Letters rise out of a mask, one after another. */
+  /* Side padding (cancelled by the negative margin) keeps tightly spaced letters from being clipped. */
+  .split { display: inline-flex; overflow: hidden; padding: 0 0.08em 0.06em; margin: 0 -0.08em; }
+  .split .ch {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.9s var(--ease-out);
+    transition-delay: calc(var(--i) * 45ms + var(--d, 0ms));
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .is-in .split .ch { transform: translateY(0); }
+
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 34px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #fff;
+    isolation: isolate;
+    background: linear-gradient(90deg, #12001c 0%, #3a0a5c 30%, #b4179e 70%, #ff7a45 100%);
+    background-size: 200% 100%;
+    background-position: 0% 0;
+    transition: background-position 0.6s var(--ease-out), transform 0.3s var(--ease-back), box-shadow 0.3s;
+    box-shadow: 0 0 0 0 rgba(196, 27, 208, 0);
+  }
+  .btn::before { /* gradient border */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: var(--grad);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
+  .btn:hover {
+    background-position: 100% 0;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 40px -8px rgba(196, 27, 208, 0.6);
+  }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s var(--ease-out), transform 1s var(--ease-out); transition-delay: var(--d, 0ms); }
+  .is-in .reveal, .reveal.is-in { opacity: 1; transform: none; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    /* Sized by its content (capped at one screen), so no empty band appears under the character on tall screens. */
+    min-height: min(100vh, 860px);
+    padding: 28px 6vw 9vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 5;
+  }
+  .nav a {
+    position: relative;
+    opacity: 0;
+    transform: translateY(-14px);
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    transition-delay: calc(var(--i) * 80ms + 200ms);
+  }
+  .is-in .nav a { opacity: 1; transform: none; }
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -6px;
+    height: 2px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .hero-title {
+    margin: 2vh 0 0;
+    font-size: clamp(32px, 10.2vw, 190px);
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 24px;
+    margin-top: -2vw;
+    flex: 1;
+  }
+  .hero-intro {
+    margin-top: 7vw;
+    max-width: 300px;
+    font-size: clamp(13px, 1.15vw, 17px);
+    line-height: 1.55;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #d8d8d8;
+  }
+  /* Intro hierarchy: name (bold, uppercase) > role (medium, title case) > description (regular). */
+  .hero-intro span { display: block; }
+  .hero-name { font-weight: 700; }
+  .hero-role { font-weight: 500; text-transform: none; }
+  .hero-desc { font-weight: 400; text-transform: none; }
+  .hero-cta { margin-top: 6.5vw; justify-self: end; }
+
+  /*
+   * Avatar: a live Three.js character (avatar3d.js) that floats, blinks and follows the cursor with
+   * its eyes and head. The wrapper pops in, --s (hero scroll progress, 0..1) eases it up and back
+   * as the hero scrolls away, and --lift (the float, -1..1, set by avatar3d.js) shrinks the glow
+   * under it as it rises.
+   */
+  .avatar-wrap {
+    position: relative;
+    z-index: 3;
+    width: clamp(280px, 46vw, 760px);
+    margin-top: -5vw;
+    transform: translateY(70%) scale(0.6);
+    opacity: 0;
+    transition: transform 1.3s var(--ease-back) 0.5s, opacity 0.6s ease 0.5s;
+  }
+  .is-in .avatar-wrap { transform: none; opacity: 1; }
+  .avatar-stage {
+    --s: 0;
+    position: relative;
+    transform: translateY(calc(var(--s) * -50px)) scale(calc(1 - var(--s) * 0.15));
+    will-change: transform;
+  }
+  /* Coloured light behind the character. */
+  .avatar-aura {
+    position: absolute;
+    inset: 26% -10% 12%;
+    border-radius: 50%;
+    background:
+      radial-gradient(closest-side at 42% 45%, rgba(124, 58, 255, 0.6), transparent 72%),
+      radial-gradient(closest-side at 62% 62%, rgba(255, 122, 69, 0.38), transparent 72%);
+    filter: blur(34px);
+    transform: scale(1.2);
+    animation: aura 6s ease-in-out infinite;
+  }
+  /* A glowing stage under the bust, so it rests on light instead of ending in a hard edge. */
+  .avatar-floor {
+    position: absolute;
+    left: -6%;
+    right: -6%;
+    bottom: -4%;
+    height: 26%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(196, 27, 208, 0.55), rgba(109, 40, 255, 0.28) 50%, transparent 100%);
+    filter: blur(22px);
+    transform: scale(calc(1 - var(--lift, 0) * 0.05), calc(1 - var(--lift, 0) * 0.12));
+    animation: aura 6s ease-in-out -3s infinite;
+  }
+  .avatar-figure { position: relative; }
+  /*
+   * data-state on the mount: static (poster only: before loading, reduced motion) → loading →
+   * ready (live canvas over the poster), or error (poster stays). The box has the picture's
+   * aspect ratio plus 4% space on each side for the float and head turns; the poster sits inset
+   * by that space (4 / 108 = 3.7037%) so the live character lines up with it exactly.
+   */
+  .avatar3d {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1312 / 1199;
+    /* Fades the cut at the bottom of the suit into the stage light. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 64%, rgba(0, 0, 0, 0.55) 83%, transparent 97%);
+    mask-image: linear-gradient(to bottom, #000 64%, rgba(0, 0, 0, 0.55) 83%, transparent 97%);
+  }
+  .avatar-poster {
+    position: absolute;
+    left: 3.7037%;
+    top: 3.7037%;
+    width: 92.5926%;
+    height: 92.5926%;
+    display: block;
+    transition: opacity 0.3s ease 0.45s;
+  }
+  .avatar3d canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .avatar3d[data-state="ready"] canvas { opacity: 1; }
+  /* The live character reacts to clicks and taps (hop, wink, giggle). */
+  .avatar3d[data-state="ready"] { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .avatar3d[data-state="ready"] .avatar-poster { opacity: 0; }
+
+  @keyframes aura {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    translate: -50% 0;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    z-index: 4;
+  }
+  .scroll-hint::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 28px;
+    margin: 10px auto 0;
+    background: linear-gradient(#fff, transparent);
+    animation: drip 1.8s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+  /* ---------- customers: technologies marquee + moving image rows ---------- */
+  .customers { position: relative; z-index: 2; padding: 8vh 0 6vh; overflow: hidden; }
+  .customers-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 28px;
+  }
+  /*
+   * Technologies marquee: the list is rendered twice inside .logo-strip and the strip slides by
+   * -50%, i.e. exactly one list, so the loop is seamless. Items use padding (not gap) so both
+   * halves have identical widths. Hovering (or holding a finger on it) pauses the strip.
+   */
+  .logo-strip {
+    display: flex;
+    width: max-content;
+    animation: marquee 55s linear infinite;
+  }
+  .customers .logo-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+  @media (hover: hover) { .tech-marquee:hover .logo-strip { animation-play-state: paused; } }
+  .tech-marquee:active .logo-strip { animation-play-state: paused; }
+  /* More room around the technologies row, so logos and names read clearly. */
+  .tech-marquee { padding: clamp(14px, 2.2vh, 24px) 0; }
+  .tech-marquee .tech { font-size: clamp(16px, 1.5vw, 23px); opacity: 0.72; }
+  .tech-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tech {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    padding: 0 clamp(16px, 1.9vw, 30px);
+    font-size: clamp(15px, 1.35vw, 21px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: #fff;
+    opacity: 0.6;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+  }
+  .tech svg {
+    flex: none;
+    width: 1.45em;
+    height: 1.45em;
+    fill: currentColor;
+    transition: color 0.3s, transform 0.3s;
+  }
+  .tech:hover { opacity: 1; }
+  .tech:hover svg { color: var(--brand, #fff); transform: scale(1.12); }
+  /* Small muted label before each group of tools. */
+  .tech-group {
+    padding: 0 clamp(10px, 1.2vw, 18px) 0 clamp(28px, 3.4vw, 56px);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* No movement: show the list once, wrapped and centred. */
+    .tech-marquee .logo-strip { width: auto; }
+    .tech-marquee .tech-list { flex-wrap: wrap; justify-content: center; row-gap: 22px; }
+    .tech-marquee [aria-hidden="true"] { display: none; }
+    .customers .tech-marquee { -webkit-mask-image: none; mask-image: none; }
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  .gallery { display: flex; flex-direction: column; gap: 18px; margin-top: 7vh; }
+  /* Margin instead of gap, so the duplicated half lines up exactly and the loop never jumps. */
+  .gallery-row { display: flex; width: max-content; animation: marquee 50s linear infinite; }
+  .gallery:hover .gallery-row { animation-play-state: paused; }
+  .gallery-tile {
+    position: relative;
+    width: clamp(220px, 24vw, 380px);
+    aspect-ratio: 4 / 3;
+    border-radius: 22px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-right: 18px;
+    transform: translateY(40px) scale(0.94);
+    opacity: 0;
+    transition: transform 1s var(--ease-out), opacity 0.8s ease;
+  }
+  .customers.is-in .gallery-tile { transform: none; opacity: 1; }
+
+  /*
+   * "Connect with me": four square cards in the gallery lane (repeated so the row loops at -50%).
+   * Each card is dark glass lit from behind by its brand colour (--brand) and links to the profile.
+   * Hover scales with the separate `scale` property, so it never fights the reveal `transform`.
+   */
+  .social-label { margin-top: 8vh; }
+  /* Extra row padding leaves room for the hover glow; the negative margin keeps the old spacing. */
+  .social-gallery { margin-top: -14px; }
+  .social-gallery .gallery-row { animation-duration: 60s; padding: 24px 0; }
+  .social-card {
+    width: clamp(200px, 21vw, 330px);
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 1.6vw, 24px);
+    background:
+      radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--brand) 34%, transparent), transparent 62%),
+      radial-gradient(120% 90% at 50% 120%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 70%),
+      linear-gradient(160deg, #17171d, #0a0a0d 70%);
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-drag: none;
+    transition: transform 1s var(--ease-out), opacity 0.8s ease, scale 0.45s var(--ease-out), box-shadow 0.45s ease;
+  }
+  .social-card:hover,
+  .social-card:focus-visible {
+    scale: 1.045;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 55%, transparent),
+                0 12px 40px -6px color-mix(in srgb, var(--brand) 55%, transparent);
+  }
+  .social-card:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  /* Keyboard focus on a card pauses the row, like hovering does. */
+  .social-gallery:focus-within .gallery-row { animation-play-state: paused; }
+  .social-logo {
+    width: 40%;
+    height: auto;
+    aspect-ratio: 1;
+    filter: drop-shadow(0 10px 28px color-mix(in srgb, var(--brand) 45%, transparent));
+    transition: transform 0.5s var(--ease-out), filter 0.5s;
+  }
+  .social-name {
+    font-size: clamp(15px, 1.25vw, 19px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.86);
+  }
+  .social-card::before { /* soft brand glow that brightens on hover */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--brand) 30%, transparent), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .social-card:hover::before { opacity: 1; }
+  .social-card:hover .social-logo { transform: scale(1.1) translateY(-4px); filter: drop-shadow(0 14px 36px color-mix(in srgb, var(--brand) 70%, transparent)); }
+  @media (prefers-reduced-motion: reduce) {
+    .social-gallery .gallery-row { width: auto; flex-wrap: wrap; justify-content: center; row-gap: 18px; }
+    .social-gallery [aria-hidden="true"] { display: none; }
+  }
+  .gallery-tile::after { /* thin glass edge */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+  }
+
+  /* ---------- about ---------- */
+  .about {
+    position: relative;
+    min-height: 100vh;
+    padding: 12vh 6vw 18vh;
+    text-align: center;
+    /* Clip sideways only: shapes may float up past the section's top edge without being cut off. */
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+  .about-title { font-size: clamp(60px, 13vw, 210px); margin: 0; position: relative; z-index: 2; }
+  .about-text {
+    max-width: 640px;
+    margin: 48px auto 40px;
+    font-size: clamp(15px, 1.35vw, 19px);
+    line-height: 1.7;
+    font-weight: 400;
+    color: #dedede;
+  }
+  .about-text span { display: block; }
+  .about-text span + span { margin-top: 0.5em; }   /* breathing room between sentences */
+  .about-text .about-close { margin-top: 1em; color: #fff; }
+  /*
+   * Floating 3D objects. The outer .shape is moved by JS (scroll parallax + 3D turn toward the
+   * mouse), .bob floats, and the svg pops in when its section scrolls into view.
+   */
+  .shape {
+    position: absolute;
+    z-index: 1;
+    will-change: transform;
+    transform-style: preserve-3d;
+  }
+  .shape svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+    filter: drop-shadow(0 0 28px var(--glow, rgba(255, 255, 255, 0.2)));
+    transform: scale(0.2) rotate(-40deg);
+    opacity: 0;
+    transition: transform 1.2s var(--ease-back), opacity 0.6s ease;
+    transition-delay: var(--pop, 0ms);
+  }
+  .is-in .shape svg { transform: none; opacity: 1; }
+  .shape .bob { animation: bob 6s ease-in-out infinite; }
+  .shape-star   { width: clamp(100px, 12vw, 190px); left: 11vw; top: 4%; --glow: rgba(200, 215, 255, 0.35); --pop: 100ms; }
+  .shape-star .bob { animation: bob 7s ease-in-out -2s infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-22px) rotate(6deg); } }
+
+  /* ---------- services (light panel) ---------- */
+  .services {
+    position: relative;
+    z-index: 1;
+    padding: 4vh 0 0;
+    background: var(--bg);
+  }
+  /* The light panel starts inset with rounded corners and grows to full width as it scrolls in (--p: 0 → 1). */
+  .services-panel {
+    --p: 0;
+    position: relative;
+    background: #e3e7ea;
+    color: #0b0b0b;
+    margin: 0 calc((1 - var(--p)) * 6vw);
+    border-radius: calc(48px - var(--p) * 20px);
+    padding: 14vh 6vw 26vh;
+    transform: translateY(calc((1 - var(--p)) * 60px));
+    will-change: margin, transform;
+  }
+  /* Heading fills from faded grey to solid black, left to right, as you scroll (--f: 0 → 1). */
+  .services-title {
+    --f: 0;
+    margin: 0 0 10vh;
+    text-align: center;
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-size: clamp(60px, 12vw, 200px);
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, #0b0b0b 0 calc(var(--f) * 100%), #b9c0c6 calc(var(--f) * 100%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .service-list { list-style: none; margin: 0 auto; padding: 0; max-width: 1100px; }
+  .service {
+    display: grid;
+    grid-template-columns: clamp(90px, 12vw, 170px) 1fr;
+    align-items: start;
+    column-gap: 2vw;
+    padding: 4.5vh 0;
+  }
+  .service-num {
+    font-family: var(--display);
+    font-size: clamp(48px, 6.4vw, 104px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    display: block;
+    overflow: hidden;
+  }
+  .service-num span {
+    display: inline-block;
+    transform: translateY(105%);
+    transition: transform 0.9s var(--ease-out);
+  }
+  .service-body { position: relative; padding: 6px 0 26px; }
+  .service-body::after { /* thin rule that draws in from the left */
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1.5px;
+    background: #b8bec3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s var(--ease-out) 0.15s, background 0.4s;
+  }
+  .service-name {
+    display: block;
+    font-weight: 700;
+    font-size: clamp(15px, 1.35vw, 20px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s ease 0.25s, transform 0.8s var(--ease-out) 0.25s;
+  }
+  .service-desc {
+    display: block;
+    max-width: 560px;
+    font-size: clamp(14px, 1.1vw, 16px);
+    line-height: 1.6;
+    color: #5f666c;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s ease 0.38s, transform 0.8s var(--ease-out) 0.38s;
+  }
+  .service.is-in .service-num span,
+  .service.is-in .service-name,
+  .service.is-in .service-desc { transform: none; opacity: 1; }
+  .service.is-in .service-body::after { transform: scaleX(1); }
+  .service:hover .service-body::after { background: var(--grad); }
+  .service-num span { transition-property: transform, color; }
+  .service:hover .service-num span { color: #6d28ff; }
+
+  @media (max-width: 760px) {
+    .services-panel { padding: 10vh 16px 20vh; margin: 0 calc((1 - var(--p)) * 16px); }
+    .service { grid-template-columns: 64px 1fr; padding: 3vh 0; }
+  }
+
+  /* ---------- projects ---------- */
+  .projects {
+    position: relative;
+    z-index: 2;
+    margin-top: -12vh;
+    padding: 12vh 6vw 16vh;
+    background: var(--bg);
+    border-radius: 48px 48px 0 0;
+    box-shadow: 0 -30px 60px rgba(0, 0, 0, 0.25);
+  }
+  .projects-title { font-size: clamp(54px, 10vw, 170px); margin: 0 0 8vh; text-align: center; }
+  .stack { position: relative; }
+  .card {
+    position: sticky;
+    top: calc(12vh + var(--i) * 74px);
+    margin-bottom: 24px;
+    border: 1.5px solid var(--line);
+    border-radius: 28px;
+    background: #070707;
+    padding: 22px 28px;
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: #fff; }
+  .card-head { display: flex; align-items: center; gap: 22px; }
+  .card-num { font-family: var(--display); font-size: clamp(30px, 3.4vw, 52px); line-height: 1; }
+  .card-name { font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 15px; }
+  .card-name small { display: block; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; text-transform: none; margin-top: 3px; }
+  .card-link {
+    margin-left: auto;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+  }
+  .card-link:hover { background: #fff; color: #000; }
+  .card-media {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    margin-top: 22px;
+    height: clamp(280px, 38vw, 560px);
+  }
+  .tile {
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.92);
+    opacity: 0;
+    transition: transform 1.1s var(--ease-out), opacity 0.8s ease;
+    transition-delay: var(--d, 0ms);
+  }
+  .card.is-in .tile { transform: scale(1); opacity: 1; }
+  .tile:first-child { grid-row: span 2; }
+  .tile .scene { position: absolute; inset: -8%; transition: transform 1.2s var(--ease-out); }
+  .tile img.scene { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
+  .card.is-in .tile img.scene { transform: scale(1); }
+  .tile:hover img.scene { transform: scale(1.08); }
+  .tile { background: #111; }
+  .tile:hover .scene { transform: scale(1.08); }
+
+  /*
+   * Project cards: a visual (real screenshot, or a labelled illustrative mockup) plus overview and
+   * highlights, in the original sticky stack: each card sticks at 12vh + i * 74px (10vh + i * 62px
+   * on phones) and the next one slides up over it. A card taller than the space below that offset
+   * would have its bottom covered before it was ever seen, so its offset is capped at
+   * "viewport height - card height": it sticks only once it is fully on screen. Cards that fit use
+   * the original offset unchanged. --h (the card's height) is set by a small script at the end.
+   */
+  .projects { margin-top: 0; }   /* follows the dark "Connect with me" area now, nothing to overlap */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .projects .project-card {
+    --stack-top: calc(12vh + var(--i) * 74px);
+    position: sticky;
+    top: min(var(--stack-top), calc(100vh - var(--h, 0px) - 24px));
+    top: min(var(--stack-top), calc(100svh - var(--h, 0px) - 24px));
+    margin-bottom: 24px;
+  }
+  @media (max-width: 760px) {
+    .projects .project-card { --stack-top: calc(10vh + var(--i) * 62px); }
+  }
+  .project-card .card-name { margin: 0; font-size: clamp(14px, 1.1vw, 17px); line-height: 1.3; }
+  .card-status { cursor: default; color: var(--tint); border-color: color-mix(in srgb, var(--tint) 45%, transparent); }
+  .card-status:hover { background: none; color: var(--tint); }
+  .project-card .card-media {
+    height: auto;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    grid-template-rows: auto;
+    min-height: clamp(360px, 30vw, 460px);
+  }
+  .project-card .tile:first-child { grid-row: auto; }
+  .pj-info {
+    background: #0e0e11;
+    padding: clamp(18px, 1.6vw, 26px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+  .pj-label { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tint); }
+  .pj-summary { margin: 0; font-size: clamp(13px, 0.95vw, 15px); line-height: 1.65; color: #cfcfd4; }
+  .pj-stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .pj-stack li { font-size: 12px; padding: 5px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #e6e6ea; }
+  .pj-points { margin: 0; padding-left: 1.1em; display: grid; gap: 10px; font-size: clamp(13px, 0.92vw, 14.5px); line-height: 1.6; color: #cfcfd4; }
+  .pj-points li::marker { color: var(--tint); }
+  .pj-links { margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .pj-links a { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; border-bottom: 1px solid color-mix(in srgb, var(--tint) 60%, transparent); padding-bottom: 2px; transition: color 0.3s; }
+  .pj-links a:hover { color: var(--tint); }
+
+  /* Visual tile: a tinted stage with a faint grid. */
+  .pv-stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 85% 10%, color-mix(in srgb, var(--tint) 24%, transparent), transparent 60%),
+      radial-gradient(80% 60% at 0% 100%, color-mix(in srgb, var(--tint) 12%, transparent), transparent 60%),
+      #0f0f11;
+  }
+  .pv-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.16;
+  }
+  /* Real screenshot in a phone frame, cropped by the tile's bottom edge. */
+  .pv-shot { display: flex; justify-content: center; align-items: flex-start; padding-top: 9%; }
+  .pv-phone {
+    position: relative;
+    width: min(52%, 250px);
+    border: 5px solid #111;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: transform 1.2s var(--ease-out);
+  }
+  .pv-phone img { display: block; width: 100%; height: auto; border-radius: 24px; }
+  .pj-visual:hover .pv-phone { transform: translateY(-5%); }
+  /* Illustrative mockups (projects without a public demo). */
+  .pv-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 5px 10px; border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.18); background: rgba(0, 0, 0, 0.4);
+  }
+  .pv-mock-body { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; gap: clamp(10px, 1.4vw, 22px); padding: 56px 5% 22px; }
+  .pv-chat { width: min(60%, 300px); border-radius: 20px; overflow: hidden; background: #0b141a; box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08); font-size: clamp(11px, 0.8vw, 12.5px); }
+  .pv-chat-head { display: flex; gap: 10px; align-items: center; padding: 10px 12px; background: #1f2c33; color: #e9edef; }
+  .pv-chat-head b { display: block; font-size: 1.05em; }
+  .pv-chat-head small { color: #8696a0; }
+  .pv-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--tint); flex: none; }
+  .pv-chat-body { display: flex; flex-direction: column; gap: 7px; padding: 12px; }
+  .pv-msg { margin: 0; max-width: 84%; padding: 7px 10px; border-radius: 10px; line-height: 1.4; color: #e9edef; }
+  .pv-msg.in { align-self: flex-start; background: #202c33; border-top-left-radius: 3px; }
+  .pv-msg.out { align-self: flex-end; background: #005c4b; border-top-right-radius: 3px; }
+  .pv-side { width: min(36%, 200px); border-radius: 16px; padding: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); font-size: clamp(11px, 0.78vw, 12.5px); display: grid; gap: 8px; }
+  .pv-side-title { margin: 0 0 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tint); }
+  .pv-row { margin: 0; display: flex; justify-content: space-between; gap: 8px; color: #9a9aa4; }
+  .pv-row b { color: #f1f1f4; font-weight: 600; text-align: right; }
+  .pv-row b.pv-ok { color: var(--tint); }
+  .pv-scan { position: relative; flex: none; width: min(46%, 230px); aspect-ratio: 3 / 4; border-radius: 18px; background: linear-gradient(180deg, #1a2430, #0d1218); overflow: hidden; box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08); }
+  .pv-scan svg { position: absolute; left: 14%; top: 18%; width: 72%; fill: rgba(160, 190, 215, 0.35); }
+  .pv-corners {
+    position: absolute; inset: 14% 18% 36%; --c: var(--tint);
+    background:
+      linear-gradient(var(--c), var(--c)) top left / 22px 3px, linear-gradient(var(--c), var(--c)) top left / 3px 22px,
+      linear-gradient(var(--c), var(--c)) top right / 22px 3px, linear-gradient(var(--c), var(--c)) top right / 3px 22px,
+      linear-gradient(var(--c), var(--c)) bottom left / 22px 3px, linear-gradient(var(--c), var(--c)) bottom left / 3px 22px,
+      linear-gradient(var(--c), var(--c)) bottom right / 22px 3px, linear-gradient(var(--c), var(--c)) bottom right / 3px 22px;
+    background-repeat: no-repeat;
+  }
+  .pv-corners::after { content: ""; position: absolute; left: 6%; right: 6%; height: 2px; background: var(--tint); box-shadow: 0 0 12px var(--tint); animation: pv-scan 2.6s ease-in-out infinite; }
+  @keyframes pv-scan { 0%, 100% { top: 8%; } 50% { top: 88%; } }
+  .pv-match { position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: color-mix(in srgb, var(--tint) 22%, #000); color: #fff; border: 1px solid color-mix(in srgb, var(--tint) 60%, transparent); }
+
+  /* Medium widths: visual across the top, overview and highlights side by side under it. */
+  @media (max-width: 1099px) {
+    .project-card .card-media { grid-template-columns: 1fr 1fr; min-height: 0; }
+    .project-card .pj-visual { grid-column: 1 / -1; height: clamp(340px, 46vw, 440px); }
+  }
+
+  /* Glossy 3D bubbles, drawn with gradients. */
+  .ball { position: absolute; border-radius: 50%; animation: drift 7s ease-in-out infinite; animation-delay: var(--dl, 0s); }
+  @keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(var(--dx, 8px), var(--dy, -12px)); } }
+  .b-blue  { background: radial-gradient(circle at 32% 28%, #ffffff 0 6%, #cfe9ff 14%, #6fb6ff 42%, #1f5fd1 75%, #0b2a6b 100%); }
+  .b-cream { background: radial-gradient(circle at 32% 28%, #fff 0 8%, #f3ede2 30%, #c9bfae 70%, #7d7464 100%); }
+  .b-gold  { background: radial-gradient(circle at 32% 28%, #fff7d6 0 8%, #ffd84d 32%, #f4a50b 70%, #8a4d00 100%); }
+  .b-green { background: radial-gradient(circle at 32% 28%, #f2ffd9 0 8%, #b6ec5b 34%, #4c9a1d 72%, #1d4508 100%); }
+  .b-pink  { background: radial-gradient(circle at 32% 28%, #fff 0 8%, #ffc4ea 30%, #ff5bb8 68%, #8a0f5b 100%); }
+  .b-dark  { background: radial-gradient(circle at 32% 28%, #9aa3b5 0 6%, #3c4458 35%, #12151d 80%); }
+
+  /* ---------- contact (light) ---------- */
+  .contact {
+    position: relative;
+    z-index: 3;
+    margin-top: -8vh;
+    padding: 18vh 8vw 26vh;
+    background: #e3e7ea;
+    color: #0b0b0b;
+    border-radius: 48px 48px 0 0;
+    overflow: hidden;
+  }
+  .contact-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6vw;
+    align-items: center;
+  }
+  .contact-title {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(54px, 8.4vw, 140px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #0b0b0b;
+  }
+  .contact-title .line { display: block; overflow: hidden; }
+  .contact-title .line span { display: inline-block; transform: translateY(105%); transition: transform 1s var(--ease-out); transition-delay: var(--d); }
+  .contact.is-in .contact-title .line span { transform: none; }
+  .contact-mail {
+    display: inline-block;
+    margin-top: 22px;
+    font-size: clamp(15px, 1.3vw, 19px);
+    font-weight: 600;
+    color: #4d555c;
+    border-bottom: 1.5px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .contact-mail:hover { color: #0b0b0b; border-color: #0b0b0b; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 26px; }
+  .contact-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6c747a; }
+  .contact-form input,
+  .contact-form textarea {
+    border: none;
+    border-bottom: 1.5px solid #b8bec3;
+    background: transparent;
+    padding: 10px 0;
+    font: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #0b0b0b;
+    outline: none;
+    resize: none;
+    transition: border-color 0.3s;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus { border-color: #0b0b0b; }
+  .contact-form .btn { align-self: flex-start; margin-top: 6px; }
+  .contact-form .btn:disabled { opacity: 0.6; cursor: progress; }
+  /* Spam trap: off-screen for people, still filled in by naive bots. */
+  .contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .contact-status { margin: -8px 0 0; min-height: 1.4em; font-size: 13px; line-height: 1.5; color: #3f464b; }
+  .contact-status.is-error { color: #b4232c; }
+  .contact-status a { color: inherit; text-decoration: underline; }
+
+  .contact .shape { z-index: 1; }
+  .shape-bolt   { width: clamp(120px, 15vw, 250px); right: 6vw; top: 8vh; --glow: rgba(190, 230, 40, 0.45); }
+  .shape-swirl  { width: clamp(130px, 16vw, 260px); left: 2vw; top: 46%; --glow: rgba(120, 80, 255, 0.4); --pop: 250ms; }
+  .shape-bolt .bob { animation: bob 7s ease-in-out infinite; }
+  .shape-swirl .bob { animation: bob 8s ease-in-out -3s infinite; }
+
+  /* ---------- footer (black, slides over the contact panel) ---------- */
+  .site-footer {
+    position: relative;
+    z-index: 4;
+    margin-top: -10vh;
+    padding: 12vh 6vw 4vh;
+    background: var(--bg);
+    border-radius: 48px 48px 0 0;
+    overflow: hidden;
+  }
+  .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 4vw; align-items: start; }
+  .footer-big {
+    margin: 0;
+    font-family: var(--display);
+    text-transform: uppercase;
+    font-size: clamp(44px, 6.4vw, 110px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: #2a2a2e;
+    transition: color 0.5s;
+  }
+  .footer-big:hover { color: #4a4a50; }
+  .footer-col h3 { margin: 0 0 14px; font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+  .footer-col a { display: block; width: fit-content; padding: 4px 0; font-size: 14px; color: var(--muted); transition: color 0.3s, transform 0.3s var(--ease-out); }
+  .footer-col a:hover { color: #fff; transform: translateX(6px); }
+
+  /* The row of colourful geometric shapes across the bottom. */
+  .footer-shapes {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1.4vw;
+    margin-top: 10vh;
+  }
+  .gshape { display: block; aspect-ratio: 1; }
+  .gshape svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transform: translateY(120%) rotate(-120deg) scale(0.6);
+    opacity: 0;
+    transition: transform 1.1s var(--ease-back), opacity 0.6s ease;
+    transition-delay: calc(var(--i) * 90ms);
+  }
+  .site-footer.is-in .gshape svg { transform: none; opacity: 1; }
+  .gshape:hover svg { animation: wobble 0.9s var(--ease-back); }
+  @keyframes wobble {
+    0% { transform: rotate(0) scale(1); }
+    40% { transform: rotate(25deg) scale(1.12); }
+    70% { transform: rotate(-10deg) scale(0.96); }
+    100% { transform: rotate(0) scale(1); }
+  }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4vh;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .footer-bottom a:hover { color: #fff; }
+
+  @media (max-width: 760px) {
+    .contact { padding: 12vh 16px 22vh; border-radius: 32px 32px 0 0; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .shape-swirl { top: 18%; left: -6vw; }
+    .site-footer { padding: 10vh 16px 4vh; border-radius: 32px 32px 0 0; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .footer-big { grid-column: 1 / -1; }
+    .footer-shapes { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  }
+
+  /* Custom cursor glow. */
+  .cursor {
+    position: fixed;
+    left: 0; top: 0;
+    width: 340px; height: 340px;
+    margin: -170px 0 0 -170px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(196, 27, 208, 0.16), transparent 65%);
+    z-index: 0;
+    transition: opacity 0.4s;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 760px) {
+    .hero { padding: 20px 16px 0; }
+    .nav { font-size: 11px; }
+    .hero-title { margin-top: 6vh; }
+    .hero-row { grid-template-columns: 1fr; justify-items: center; text-align: center; margin-top: 0; }
+    .avatar-wrap { order: -1; margin-top: 3vw; margin-bottom: -12vw; width: 84vw; }
+    .hero-intro, .hero-cta { margin-top: 18px; justify-self: center; }
+    .about, .projects, .contact { padding-left: 16px; padding-right: 16px; }
+    .customers-label { padding: 0 16px; letter-spacing: 0.24em; line-height: 1.7; }
+    /* About is followed by the technologies strip: no full-screen minimum, so no empty band between them. */
+    .about { min-height: 0; padding-bottom: 8vh; }
+    .card { padding: 16px; border-radius: 22px; top: calc(10vh + var(--i) * 62px); }
+    .card-head { gap: 12px; }
+    .card-media { grid-template-columns: 1fr; grid-template-rows: 1.4fr 1fr 1fr; height: 520px; }
+    .tile:first-child { grid-row: auto; }
+    /* Project cards on phones: one column, natural height. */
+    .project-card .card-media { grid-template-columns: 1fr; grid-template-rows: none; height: auto; }
+    .project-card .pj-visual { height: 380px; }
+    .project-card .card-head { flex-wrap: wrap; }
+    .project-card .card-link { margin-left: 0; }
+    .pv-mock-body { padding: 52px 4% 18px; }
+    .shape-star { left: 2vw; }
+    .cursor { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" data-reveal>
+  <nav class="nav">
+    <a href="#about" style="--i:0" data-avatar-react="interest">About</a>
+    <a href="#technologies" style="--i:1" data-avatar-react="interest">Technologies</a>
+    <a href="#projects" style="--i:2" data-avatar-react="interest">Projects</a>
+    <a href="#contact" style="--i:3" data-avatar-react="interest">Contact</a>
+  </nav>
+
+  <h1 class="hero-title silver" data-split>Hi, I’m Swabri</h1>
+
+  <div class="hero-row">
+    <p class="hero-intro reveal" style="--d:900ms"><span class="hero-name">Muhsin Swabri</span><span class="hero-role">Software Developer</span><span class="hero-desc">Specializing in full-stack development, AI integration, and intelligent automation to build meaningful digital solutions.</span></p>
+
+    <div class="avatar-wrap">
+      <div class="avatar-stage" id="avatarStage">
+        <div class="avatar-aura" aria-hidden="true"></div>
+        <div class="avatar-floor" aria-hidden="true"></div>
+        <div class="avatar-figure">
+          <!-- Swabri's avatar. The poster shows straight away (and stays as the fallback);
+               avatar3d.js brings the character to life on a canvas over it. -->
+          <div class="avatar3d" id="avatar3d" data-state="static" role="img" aria-label="Swabri, a smiling 3D cartoon avatar">
+            <img class="avatar-poster" src="images/swabri-avatar.webp" alt="" width="1312" height="1199" decoding="async" fetchpriority="high" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="btn hero-cta reveal" style="--d:1100ms" href="#contact" data-avatar-react="excited">Contact me</a>
+  </div>
+
+  <span class="scroll-hint">Scroll</span>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="about" id="about" data-reveal>
+  <!-- Puffy chrome star: a dark extruded back layer, a rounded chrome face, and specular highlights. -->
+  <div class="shape shape-star" data-parallax="-0.25" data-depth="1.2" aria-hidden="true">
+    <div class="bob">
+      <svg viewBox="0 0 220 220">
+        <defs>
+          <radialGradient id="chromeFace" cx="34%" cy="28%" r="85%">
+            <stop offset="0" stop-color="#ffffff" />
+            <stop offset="0.22" stop-color="#e8edf7" />
+            <stop offset="0.5" stop-color="#9ca5bb" />
+            <stop offset="0.72" stop-color="#4c5468" />
+            <stop offset="0.9" stop-color="#b9c1d4" />
+            <stop offset="1" stop-color="#e9edf5" />
+          </radialGradient>
+          <linearGradient id="chromeBack" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3b4152" />
+            <stop offset="1" stop-color="#14161d" />
+          </linearGradient>
+        </defs>
+        <path d="M110 22 133 82 198 85 147 124 166 190 110 152 54 190 73 124 22 85 87 82Z" transform="translate(7 10)" fill="url(#chromeBack)" stroke="url(#chromeBack)" stroke-width="24" stroke-linejoin="round" />
+        <path d="M110 22 133 82 198 85 147 124 166 190 110 152 54 190 73 124 22 85 87 82Z" fill="url(#chromeFace)" stroke="url(#chromeFace)" stroke-width="24" stroke-linejoin="round" />
+        <ellipse cx="88" cy="74" rx="30" ry="11" fill="#fff" opacity="0.7" transform="rotate(-38 88 74)" />
+        <circle cx="140" cy="96" r="5" fill="#fff" opacity="0.8" />
+        <path d="M60 150c18 14 40 18 60 10" stroke="#fff" stroke-opacity="0.35" stroke-width="5" fill="none" stroke-linecap="round" />
+      </svg>
+    </div>
+  </div>
+
+  <h2 class="about-title silver" data-split>About me</h2>
+  <p class="about-text">
+    <span class="reveal" style="--d:300ms">I’m Muhsin Swabri, a multidisciplinary professional working across software development, video editing, graphic design, and digital marketing.</span>
+    <span class="reveal" style="--d:420ms">I build full-stack applications, explore AI&#8209;powered solutions, create engaging visual content, and turn ideas into digital products of my own.</span>
+    <span class="reveal" style="--d:540ms">I enjoy combining technology and creativity to bring meaningful ideas to life.</span>
+    <span class="reveal about-close" style="--d:700ms">Let’s create something impactful together.</span>
+  </p>
+  <a class="btn reveal" style="--d:900ms" href="#contact">Contact me</a>
+</section>
+
+<!-- ================= TECHNOLOGIES & CONNECT WITH ME ================= -->
+<section class="customers" id="technologies" data-reveal>
+  <p class="customers-label">Technologies &amp; tools I work with</p>
+  <!-- Logos: Simple Icons 13.21.0 (CC0), CapCut from theSVG, HyperFrames symbol from
+       heygen-com/hyperframes, REST APIs: Lucide "webhook" (no brand logo exists).
+       The list is repeated once (hidden from screen readers) so the strip can loop at -50%. -->
+  <div class="logo-mask tech-marquee" role="region" aria-label="Technologies and tools I work with">
+    <div class="logo-strip"><ul class="tech-list"><li class="tech-group">MERN stack</li><li class="tech" style="--brand:#47A248"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z"/></svg><span>MongoDB</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M24 18.588a1.529 1.529 0 01-1.895-.72l-3.45-4.771-.5-.667-4.003 5.444a1.466 1.466 0 01-1.802.708l5.158-6.92-4.798-6.251a1.595 1.595 0 011.9.666l3.576 4.83 3.596-4.81a1.435 1.435 0 011.788-.668L21.708 7.9l-2.522 3.283a.666.666 0 000 .994l4.804 6.412zM.002 11.576l.42-2.075c1.154-4.103 5.858-5.81 9.094-3.27 1.895 1.489 2.368 3.597 2.275 5.973H1.116C.943 16.447 4.005 19.009 7.92 17.7a4.078 4.078 0 002.582-2.876c.207-.666.548-.78 1.174-.588a5.417 5.417 0 01-2.589 3.957 6.272 6.272 0 01-7.306-.933 6.575 6.575 0 01-1.64-3.858c0-.235-.08-.455-.134-.666A88.33 88.33 0 010 11.577zm1.127-.286h9.654c-.06-3.076-2.001-5.258-4.59-5.278-2.882-.04-4.944 2.094-5.071 5.264z"/></svg><span>Express.js</span></li><li class="tech" style="--brand:#61DAFB"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg><span>React.js</span></li><li class="tech" style="--brand:#5FA04E"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"/></svg><span>Node.js</span></li><li class="tech-group">Development</li><li class="tech" style="--brand:#F7DF1E"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg><span>JavaScript</span></li><li class="tech" style="--brand:#E34F26"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg><span>HTML5</span></li><li class="tech" style="--brand:#1572B6"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z"/></svg><span>CSS3</span></li><li class="tech" style="--brand:#F05032"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg><span>Git</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></li><li class="tech" style="--brand:#FF6C37"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.527.099C6.955-.744.942 3.9.099 10.473c-.843 6.572 3.8 12.584 10.373 13.428 6.573.843 12.587-3.801 13.428-10.374C24.744 6.955 20.101.943 13.527.099zm2.471 7.485a.855.855 0 0 0-.593.25l-4.453 4.453-.307-.307-.643-.643c4.389-4.376 5.18-4.418 5.996-3.753zm-4.863 4.861l4.44-4.44a.62.62 0 1 1 .847.903l-4.699 4.125-.588-.588zm.33.694l-1.1.238a.06.06 0 0 1-.067-.032.06.06 0 0 1 .01-.073l.645-.645.512.512zm-2.803-.459l1.172-1.172.879.878-1.979.426a.074.074 0 0 1-.085-.039.072.072 0 0 1 .013-.093zm-3.646 6.058a.076.076 0 0 1-.069-.083.077.077 0 0 1 .022-.046h.002l.946-.946 1.222 1.222-2.123-.147zm2.425-1.256a.228.228 0 0 0-.117.256l.203.865a.125.125 0 0 1-.211.117h-.003l-.934-.934-.294-.295 3.762-3.758 1.82-.393.874.874c-1.255 1.102-2.971 2.201-5.1 3.268zm5.279-3.428h-.002l-.839-.839 4.699-4.125a.952.952 0 0 0 .119-.127c-.148 1.345-2.029 3.245-3.977 5.091zm3.657-6.46l-.003-.002a1.822 1.822 0 0 1 2.459-2.684l-1.61 1.613a.119.119 0 0 0 0 .169l1.247 1.247a1.817 1.817 0 0 1-2.093-.343zm2.578 0a1.714 1.714 0 0 1-.271.218h-.001l-1.207-1.207 1.533-1.533c.661.72.637 1.832-.054 2.522zM18.855 6.05a.143.143 0 0 0-.053.157.416.416 0 0 1-.053.45.14.14 0 0 0 .023.197.141.141 0 0 0 .084.03.14.14 0 0 0 .106-.05.691.691 0 0 0 .087-.751.138.138 0 0 0-.194-.033z"/></svg><span>Postman</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg><span>Vercel</span></li><li class="tech-group">AI &amp; automation</li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg><span>OpenAI</span></li><li class="tech" style="--brand:#EA4B71"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/></svg><span>n8n</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17l3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6l3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg><span>REST APIs</span></li><li class="tech-group">Creative</li><li class="tech" style="--brand:#06E3FA"><svg viewBox="4 4 92 92" aria-hidden="true" focusable="false"><path d="M10.1851 57.8021L33.1145 73.8313C36.2202 75.9978 41.5173 73.5433 42.4816 69.4984L51.7611 30.4271C52.7253 26.3822 48.5802 23.9277 44.4602 26.0942L13.917 42.1235C6.96677 45.7676 4.97564 54.1579 10.1851 57.8021Z"/><path d="M87.5129 57.5141L56.9696 73.5433C52.8371 75.7098 48.7046 73.2553 49.6688 69.2104L58.9483 30.1391C59.9125 26.0942 65.2097 23.6397 68.3154 25.8062L91.2447 41.8354C96.4668 45.4796 94.4631 53.8699 87.5129 57.5141Z"/></svg><span>HyperFrames</span></li><li class="tech" style="--brand:#00C4CC"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zM6.962 7.68c.754 0 1.337.549 1.405 1.2.069.583-.171 1.097-.822 1.406-.343.171-.48.172-.549.069-.034-.069 0-.137.069-.206.617-.514.617-.926.548-1.508-.034-.378-.308-.618-.583-.618-1.2 0-2.914 2.674-2.674 4.629.103.754.549 1.646 1.509 1.646.308 0 .65-.103.96-.24.5-.264.799-.47 1.097-.8-.073-.885.704-2.046 1.851-2.046.515 0 .926.205.96.583.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378-.035-.206-.24-.274-.446-.274-.72 0-1.131.994-1.029 1.611.035.275.172.549.447.549.205 0 .514-.31.617-.755.068-.308.343-.514.583-.514.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651 0 .069.034.171.17.171.092 0 .436-.18.777-.459.117-.59.253-1.298.253-1.357.034-.24.137-.48.617-.48.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994.172 0 .309.102.309.274 0 .103 0 .274-.069.446-.137.377-.309.96-.412 1.474 0 .137.035.274.207.274.171 0 .685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202 0-.411.035-.754.104-.994.068-.274.411-.514.617-.514.103 0 .205.069.205.171 0 .035 0 .103-.034.137-.137.446-.24.857-.24 1.269 0 .24.034.582.102.788 0 .034.035.069.07.069.068 0 .548-.445.89-1.028-.308-.206-.48-.549-.48-.96 0-.72.446-1.097.858-1.097.343 0 .617.24.617.72 0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24.293.293 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74.48 0 .924.205.959.582.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172 0-.137.309-.068.274-.376-.034-.206-.24-.275-.446-.275-.686 0-1.13.891-1.028 1.611.034.275.171.583.445.583.206 0 .515-.308.652-.754.068-.274.343-.514.583-.514.103 0 .17.034.205.171 0 .069 0 .206-.137.652-.17.308-.171.48-.137.617.034.274.171.48.309.583.034.034.068.102.068.102 0 .069-.034.138-.137.138-.034 0-.068 0-.103-.035-.514-.205-.72-.548-.789-.891-.205.24-.445.377-.72.377-.445 0-.89-.411-.96-.926a1.609 1.609 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.896.896 0 0 1-.377.104c-.068 0-.171-.035-.205-.104-.095-.152-.156-.392-.193-.667-.481.527-1.145.805-1.453.805-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508-.308 0-.48-.172-.514-.412-.206.274-.445.412-.754.412-.352 0-.696-.24-.862-.593-.244.275-.523.553-.852.764-.48.309-1.028.549-1.68.549-.582 0-1.097-.309-1.371-.583-.412-.377-.651-.96-.686-1.509-.205-1.68.823-3.84 2.4-4.8.378-.205.755-.343 1.132-.343zm9.77 3.291c-.104 0-.172.172-.172.343 0 .274.137.583.309.755a1.74 1.74 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z"/></svg><span>Canva</span></li><li class="tech"><svg viewBox="0 0 24.2 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M24.189 6.442V2.671l-4.535 2.383V4.91c.002-1.505-1.078-2.411-2.638-2.411H2.64C.993 2.5 0 3.407 0 4.91v3.81L6.354 12L0 15.316v3.8C0 20.595 1 21.5 2.64 21.5h14.373c1.56 0 2.639-.907 2.639-2.382v-.197l4.536 2.409v-3.828L13.64 12l10.55-5.557zM9.982 13.873l7.797 4.083H2.157zm7.741-7.828l-7.742 4.057l-7.825-4.057z"/></svg><span>CapCut</span></li></ul><ul class="tech-list" aria-hidden="true"><li class="tech-group">MERN stack</li><li class="tech" style="--brand:#47A248"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z"/></svg><span>MongoDB</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M24 18.588a1.529 1.529 0 01-1.895-.72l-3.45-4.771-.5-.667-4.003 5.444a1.466 1.466 0 01-1.802.708l5.158-6.92-4.798-6.251a1.595 1.595 0 011.9.666l3.576 4.83 3.596-4.81a1.435 1.435 0 011.788-.668L21.708 7.9l-2.522 3.283a.666.666 0 000 .994l4.804 6.412zM.002 11.576l.42-2.075c1.154-4.103 5.858-5.81 9.094-3.27 1.895 1.489 2.368 3.597 2.275 5.973H1.116C.943 16.447 4.005 19.009 7.92 17.7a4.078 4.078 0 002.582-2.876c.207-.666.548-.78 1.174-.588a5.417 5.417 0 01-2.589 3.957 6.272 6.272 0 01-7.306-.933 6.575 6.575 0 01-1.64-3.858c0-.235-.08-.455-.134-.666A88.33 88.33 0 010 11.577zm1.127-.286h9.654c-.06-3.076-2.001-5.258-4.59-5.278-2.882-.04-4.944 2.094-5.071 5.264z"/></svg><span>Express.js</span></li><li class="tech" style="--brand:#61DAFB"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg><span>React.js</span></li><li class="tech" style="--brand:#5FA04E"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"/></svg><span>Node.js</span></li><li class="tech-group">Development</li><li class="tech" style="--brand:#F7DF1E"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg><span>JavaScript</span></li><li class="tech" style="--brand:#E34F26"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg><span>HTML5</span></li><li class="tech" style="--brand:#1572B6"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z"/></svg><span>CSS3</span></li><li class="tech" style="--brand:#F05032"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg><span>Git</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></li><li class="tech" style="--brand:#FF6C37"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.527.099C6.955-.744.942 3.9.099 10.473c-.843 6.572 3.8 12.584 10.373 13.428 6.573.843 12.587-3.801 13.428-10.374C24.744 6.955 20.101.943 13.527.099zm2.471 7.485a.855.855 0 0 0-.593.25l-4.453 4.453-.307-.307-.643-.643c4.389-4.376 5.18-4.418 5.996-3.753zm-4.863 4.861l4.44-4.44a.62.62 0 1 1 .847.903l-4.699 4.125-.588-.588zm.33.694l-1.1.238a.06.06 0 0 1-.067-.032.06.06 0 0 1 .01-.073l.645-.645.512.512zm-2.803-.459l1.172-1.172.879.878-1.979.426a.074.074 0 0 1-.085-.039.072.072 0 0 1 .013-.093zm-3.646 6.058a.076.076 0 0 1-.069-.083.077.077 0 0 1 .022-.046h.002l.946-.946 1.222 1.222-2.123-.147zm2.425-1.256a.228.228 0 0 0-.117.256l.203.865a.125.125 0 0 1-.211.117h-.003l-.934-.934-.294-.295 3.762-3.758 1.82-.393.874.874c-1.255 1.102-2.971 2.201-5.1 3.268zm5.279-3.428h-.002l-.839-.839 4.699-4.125a.952.952 0 0 0 .119-.127c-.148 1.345-2.029 3.245-3.977 5.091zm3.657-6.46l-.003-.002a1.822 1.822 0 0 1 2.459-2.684l-1.61 1.613a.119.119 0 0 0 0 .169l1.247 1.247a1.817 1.817 0 0 1-2.093-.343zm2.578 0a1.714 1.714 0 0 1-.271.218h-.001l-1.207-1.207 1.533-1.533c.661.72.637 1.832-.054 2.522zM18.855 6.05a.143.143 0 0 0-.053.157.416.416 0 0 1-.053.45.14.14 0 0 0 .023.197.141.141 0 0 0 .084.03.14.14 0 0 0 .106-.05.691.691 0 0 0 .087-.751.138.138 0 0 0-.194-.033z"/></svg><span>Postman</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg><span>Vercel</span></li><li class="tech-group">AI &amp; automation</li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg><span>OpenAI</span></li><li class="tech" style="--brand:#EA4B71"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/></svg><span>n8n</span></li><li class="tech"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17l3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6l3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg><span>REST APIs</span></li><li class="tech-group">Creative</li><li class="tech" style="--brand:#06E3FA"><svg viewBox="4 4 92 92" aria-hidden="true" focusable="false"><path d="M10.1851 57.8021L33.1145 73.8313C36.2202 75.9978 41.5173 73.5433 42.4816 69.4984L51.7611 30.4271C52.7253 26.3822 48.5802 23.9277 44.4602 26.0942L13.917 42.1235C6.96677 45.7676 4.97564 54.1579 10.1851 57.8021Z"/><path d="M87.5129 57.5141L56.9696 73.5433C52.8371 75.7098 48.7046 73.2553 49.6688 69.2104L58.9483 30.1391C59.9125 26.0942 65.2097 23.6397 68.3154 25.8062L91.2447 41.8354C96.4668 45.4796 94.4631 53.8699 87.5129 57.5141Z"/></svg><span>HyperFrames</span></li><li class="tech" style="--brand:#00C4CC"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zM6.962 7.68c.754 0 1.337.549 1.405 1.2.069.583-.171 1.097-.822 1.406-.343.171-.48.172-.549.069-.034-.069 0-.137.069-.206.617-.514.617-.926.548-1.508-.034-.378-.308-.618-.583-.618-1.2 0-2.914 2.674-2.674 4.629.103.754.549 1.646 1.509 1.646.308 0 .65-.103.96-.24.5-.264.799-.47 1.097-.8-.073-.885.704-2.046 1.851-2.046.515 0 .926.205.96.583.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378-.035-.206-.24-.274-.446-.274-.72 0-1.131.994-1.029 1.611.035.275.172.549.447.549.205 0 .514-.31.617-.755.068-.308.343-.514.583-.514.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651 0 .069.034.171.17.171.092 0 .436-.18.777-.459.117-.59.253-1.298.253-1.357.034-.24.137-.48.617-.48.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994.172 0 .309.102.309.274 0 .103 0 .274-.069.446-.137.377-.309.96-.412 1.474 0 .137.035.274.207.274.171 0 .685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202 0-.411.035-.754.104-.994.068-.274.411-.514.617-.514.103 0 .205.069.205.171 0 .035 0 .103-.034.137-.137.446-.24.857-.24 1.269 0 .24.034.582.102.788 0 .034.035.069.07.069.068 0 .548-.445.89-1.028-.308-.206-.48-.549-.48-.96 0-.72.446-1.097.858-1.097.343 0 .617.24.617.72 0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24.293.293 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74.48 0 .924.205.959.582.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172 0-.137.309-.068.274-.376-.034-.206-.24-.275-.446-.275-.686 0-1.13.891-1.028 1.611.034.275.171.583.445.583.206 0 .515-.308.652-.754.068-.274.343-.514.583-.514.103 0 .17.034.205.171 0 .069 0 .206-.137.652-.17.308-.171.48-.137.617.034.274.171.48.309.583.034.034.068.102.068.102 0 .069-.034.138-.137.138-.034 0-.068 0-.103-.035-.514-.205-.72-.548-.789-.891-.205.24-.445.377-.72.377-.445 0-.89-.411-.96-.926a1.609 1.609 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.896.896 0 0 1-.377.104c-.068 0-.171-.035-.205-.104-.095-.152-.156-.392-.193-.667-.481.527-1.145.805-1.453.805-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508-.308 0-.48-.172-.514-.412-.206.274-.445.412-.754.412-.352 0-.696-.24-.862-.593-.244.275-.523.553-.852.764-.48.309-1.028.549-1.68.549-.582 0-1.097-.309-1.371-.583-.412-.377-.651-.96-.686-1.509-.205-1.68.823-3.84 2.4-4.8.378-.205.755-.343 1.132-.343zm9.77 3.291c-.104 0-.172.172-.172.343 0 .274.137.583.309.755a1.74 1.74 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z"/></svg><span>Canva</span></li><li class="tech"><svg viewBox="0 0 24.2 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M24.189 6.442V2.671l-4.535 2.383V4.91c.002-1.505-1.078-2.411-2.638-2.411H2.64C.993 2.5 0 3.407 0 4.91v3.81L6.354 12L0 15.316v3.8C0 20.595 1 21.5 2.64 21.5h14.373c1.56 0 2.639-.907 2.639-2.382v-.197l4.536 2.409v-3.828L13.64 12l10.55-5.557zM9.982 13.873l7.797 4.083H2.157zm7.741-7.828l-7.742 4.057l-7.825-4.057z"/></svg><span>CapCut</span></li></ul></div>
+  </div>
+  <p class="customers-label social-label">Connect with me</p>
+  <!-- Social cards: logos from Simple Icons 13.21.0 (CC0) in brand colours. Each card links to the
+       profile and opens it in a new tab. The four cards repeat (only the first set is read out) so the
+       row is two identical halves and the -50% marquee loops seamlessly. -->
+  <div class="gallery social-gallery" role="region" aria-label="Connect with me: LinkedIn, Instagram, Reddit, GitHub">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><radialGradient id="igGradient" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#FDF497"/><stop offset="0.05" stop-color="#FDF497"/><stop offset="0.45" stop-color="#FD5949"/><stop offset="0.6" stop-color="#D6249F"/><stop offset="0.9" stop-color="#285AEB"/></radialGradient></defs></svg>
+    <div class="gallery-row"><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-label="LinkedIn profile (opens in a new tab)"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-label="Instagram profile (opens in a new tab)"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-label="Reddit profile (opens in a new tab)"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-label="GitHub profile (opens in a new tab)"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a><a class="gallery-tile social-card" style="--brand:#0A66C2" href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="social-name">LinkedIn</span></a><a class="gallery-tile social-card" style="--brand:#D62976" href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="url(#igGradient)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span class="social-name">Instagram</span></a><a class="gallery-tile social-card" style="--brand:#FF4500" href="https://www.reddit.com/u/muhsinswabri/s/YJkpLH5kG5" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z"/></svg><span class="social-name">Reddit</span></a><a class="gallery-tile social-card" style="--brand:#8B949E" href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer" draggable="false" aria-hidden="true" tabindex="-1"><svg class="social-logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FFFFFF" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="social-name">GitHub</span></a></div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<!-- Content from the CV. Chelaveee and Apna Apna use
+     real app screenshots; the three projects without a public demo use illustrative mockups,
+     labelled as such. Order: enterprise AI, face recognition, live applications. -->
+<section class="projects" id="projects">
+  <h2 class="projects-title silver" data-reveal><span data-split>Projects</span></h2>
+
+  <div class="stack">
+    <article class="card project-card" style="--i:0; --tint:#3ddc84" data-reveal>
+      <div class="card-head">
+        <span class="card-num silver">01</span>
+        <h3 class="card-name">AI-Powered WhatsApp CRM Automation Platform<small>Enterprise AI project · Completed</small></h3>
+        <span class="card-link card-status">Completed</span>
+      </div>
+      <div class="card-media">
+        <div class="tile pj-visual" style="--d:0ms"><div class="pv-stage pv-mock"><span class="pv-tag">Illustrative mockup</span><div class="pv-mock-body"><div class="pv-chat"><div class="pv-chat-head"><span class="pv-avatar" aria-hidden="true"></span><span><b>Lead assistant</b><small>AI agent · WhatsApp</small></span></div><div class="pv-chat-body"><p class="pv-msg in">Hi, I&#x27;d like to book a demo next week.</p><p class="pv-msg out">Happy to help! Tuesday 11:00 or Thursday 15:30 are free. Which suits you?</p><p class="pv-msg in">Thursday, please.</p><p class="pv-msg out">Booked for Thursday 15:30 and added to the calendar. I&#x27;ll send a reminder the day before.</p></div></div><div class="pv-side"><p class="pv-side-title">CRM</p><p class="pv-row"><span>Lead</span><b class="pv-ok">Captured</b></p><p class="pv-row"><span>Stage</span><b>Demo booked</b></p><p class="pv-row"><span>Calendar</span><b class="pv-ok">Synced</b></p><p class="pv-row"><span>Follow-up</span><b>Scheduled</b></p></div></div></div></div>
+        <div class="tile pj-info" style="--d:120ms">
+          <p class="pj-label">Overview</p>
+          <p class="pj-summary">A WhatsApp CRM automation platform built in n8n, orchestrating lead capture, customer messaging, and CRM updates through WhatsApp API / WAHA integration.</p>
+          <ul class="pj-stack" aria-label="Technologies"><li>n8n</li><li>WhatsApp API / WAHA</li><li>OpenAI APIs</li><li>LLM Agents</li><li>PostgreSQL</li><li>Docker</li><li>Google Calendar API</li></ul>
+        </div>
+        <div class="tile pj-info" style="--d:240ms">
+          <p class="pj-label">Highlights</p>
+          <ul class="pj-points"><li>Integrated OpenAI APIs to run LLM conversational agents across 3 automated workflows: customer support, appointment booking through the Google Calendar API, and follow-up sequences.</li><li>Modeled leads, conversations, and appointments in PostgreSQL for persistent CRM history, and containerized the platform with Docker for deployment.</li></ul>
+          
+        </div>
+      </div>
+    </article>
+
+    <article class="card project-card" style="--i:1; --tint:#ff9f43" data-reveal>
+      <div class="card-head">
+        <span class="card-num silver">02</span>
+        <h3 class="card-name">Restaurant End-to-End AI Automation System<small>Enterprise AI project · Completed</small></h3>
+        <span class="card-link card-status">Completed</span>
+      </div>
+      <div class="card-media">
+        <div class="tile pj-visual" style="--d:0ms"><div class="pv-stage pv-mock"><span class="pv-tag">Illustrative mockup</span><div class="pv-mock-body"><div class="pv-chat"><div class="pv-chat-head"><span class="pv-avatar" aria-hidden="true"></span><span><b>Restaurant assistant</b><small>AI agent · WhatsApp</small></span></div><div class="pv-chat-body"><p class="pv-msg in">Can I get a table for 4 tonight at 8?</p><p class="pv-msg out">Done! Table for 4 at 20:00 is reserved. Would you like to pre-order?</p><p class="pv-msg in">Yes: 2 biryani and 2 mint limes.</p><p class="pv-msg out">Order added to your reservation. See you tonight!</p></div></div><div class="pv-side"><p class="pv-side-title">Order</p><p class="pv-row"><span>Table</span><b>4 guests · 20:00</b></p><p class="pv-row"><span>Items</span><b>2 biryani, 2 mint lime</b></p><p class="pv-row"><span>Database</span><b class="pv-ok">Synced</b></p></div></div></div></div>
+        <div class="tile pj-info" style="--d:120ms">
+          <p class="pj-label">Overview</p>
+          <p class="pj-summary">An end-to-end AI automation system for restaurant operations, delivering WhatsApp-based customer support and order management through n8n workflows.</p>
+          <ul class="pj-stack" aria-label="Technologies"><li>n8n</li><li>WhatsApp API</li><li>AI Agents</li><li>LLMs</li><li>REST APIs</li><li>Database Integration</li></ul>
+        </div>
+        <div class="tile pj-info" style="--d:240ms">
+          <p class="pj-label">Highlights</p>
+          <ul class="pj-points"><li>Implemented LLM-powered AI agents to handle customer conversations, capture orders, and manage table reservation workflows without manual intervention.</li><li>Integrated workflows with a customer database over REST APIs, keeping bookings, orders, and follow-ups synchronized in real time.</li></ul>
+          
+        </div>
+      </div>
+    </article>
+
+    <article class="card project-card" style="--i:2; --tint:#4cc9f0" data-reveal>
+      <div class="card-head">
+        <span class="card-num silver">03</span>
+        <h3 class="card-name">SmartVision – Smart Attendance System<small>Face recognition project · Completed</small></h3>
+        <a class="card-link" href="https://github.com/Muhsinswabri/face-recognition" target="_blank" rel="noopener noreferrer">Repository ↗<span class="sr-only"> (opens in a new tab)</span></a>
+      </div>
+      <div class="card-media">
+        <div class="tile pj-visual" style="--d:0ms"><div class="pv-stage pv-mock"><span class="pv-tag">Illustrative mockup</span><div class="pv-mock-body"><div class="pv-scan"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="48" r="22"/><path d="M22 112c4-24 20-36 38-36s34 12 38 36"/></svg><span class="pv-corners" aria-hidden="true"></span><span class="pv-match">Match 0.94 · Present</span></div><div class="pv-side"><p class="pv-side-title">Attendance check</p><p class="pv-row"><span>Embedding</span><b>512-d</b></p><p class="pv-row"><span>FAISS</span><b class="pv-ok">Matched</b></p><p class="pv-row"><span>GPS</span><b class="pv-ok">On campus</b></p><p class="pv-row"><span>Window</span><b class="pv-ok">09:00–09:15</b></p></div></div></div></div>
+        <div class="tile pj-info" style="--d:120ms">
+          <p class="pj-label">Overview</p>
+          <p class="pj-summary">A web-based face recognition attendance system in Flask, using InsightFace to generate 512-dimensional face embeddings and FAISS for fast similarity search across enrolled students.</p>
+          <ul class="pj-stack" aria-label="Technologies"><li>Python</li><li>Flask</li><li>InsightFace</li><li>ArcFace</li><li>FAISS</li><li>Appwrite</li></ul>
+        </div>
+        <div class="tile pj-info" style="--d:240ms">
+          <p class="pj-label">Highlights</p>
+          <ul class="pj-points"><li>Implemented GPS and time-based validation rules to secure attendance marking against off-site and out-of-window entries.</li><li>Delivered 2 role-specific dashboards (administrator and student) for attendance analytics, backed by Appwrite for application data.</li></ul>
+          <p class="pj-links"><a href="https://github.com/Muhsinswabri/face-recognition" target="_blank" rel="noopener noreferrer">Repository ↗</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card project-card" style="--i:3; --tint:#f5c84c" data-reveal>
+      <div class="card-head">
+        <span class="card-num silver">04</span>
+        <h3 class="card-name">Chelaveee – Expense Management Application<small>Live application · Live</small></h3>
+        <a class="card-link" href="https://chelaveee.online" target="_blank" rel="noopener noreferrer">Live site ↗<span class="sr-only"> (chelaveee.online, opens in a new tab)</span></a>
+      </div>
+      <div class="card-media">
+        <div class="tile pj-visual" style="--d:0ms"><div class="pv-stage pv-shot"><div class="pv-phone"><img src="images/projects/chelaveee-home-900.webp" srcset="images/projects/chelaveee-home-480.webp 480w, images/projects/chelaveee-home-900.webp 900w" sizes="(max-width: 760px) 60vw, 22vw" width="1179" height="2313" alt="Chelaveee home screen showing available balance, monthly trend line and recent transactions" loading="lazy" decoding="async" /></div></div></div>
+        <div class="tile pj-info" style="--d:120ms">
+          <p class="pj-label">Overview</p>
+          <p class="pj-summary">A Progressive Web App for tracking personal income and expenses, organizing transactions into categories, and viewing financial summaries through a simple, user-friendly interface.</p>
+          <ul class="pj-stack" aria-label="Technologies"><li>React</li><li>Vite</li><li>Tailwind CSS</li><li>IndexedDB</li><li>Vercel Serverless</li><li>Upstash Redis</li><li>PWA</li><li>iOS Shortcuts</li></ul>
+        </div>
+        <div class="tile pj-info" style="--d:240ms">
+          <p class="pj-label">Highlights</p>
+          <ul class="pj-points"><li>Implemented IndexedDB-based local data persistence with offline use, and a token-protected serverless API on Vercel that queues transactions in Upstash Redis until the app imports them.</li><li>Integrated iOS Shortcuts so expenses and income can be recorded in a few taps without opening the app.</li></ul>
+          <p class="pj-links"><a href="https://chelaveee.online" target="_blank" rel="noopener noreferrer">Live site · chelaveee.online ↗</a><a href="https://github.com/Muhsinswabri/expense-tracker" target="_blank" rel="noopener noreferrer">Repository ↗</a></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card project-card" style="--i:4; --tint:#8b7bff" data-reveal>
+      <div class="card-head">
+        <span class="card-num silver">05</span>
+        <h3 class="card-name">Apna Apna – Trip Expense Splitting Application<small>Live application · Live</small></h3>
+        <a class="card-link" href="https://apnaapna.online" target="_blank" rel="noopener noreferrer">Live site ↗<span class="sr-only"> (apnaapna.online, opens in a new tab)</span></a>
+      </div>
+      <div class="card-media">
+        <div class="tile pj-visual" style="--d:0ms"><div class="pv-stage pv-shot"><div class="pv-phone"><img src="images/projects/apna-apna-home-900.webp" srcset="images/projects/apna-apna-home-480.webp 480w, images/projects/apna-apna-home-900.webp 900w" sizes="(max-width: 760px) 60vw, 22vw" width="1179" height="2313" alt="Apna Apna home screen with a start-a-new-trip card and a list of completed trips" loading="lazy" decoding="async" /></div></div></div>
+        <div class="tile pj-info" style="--d:120ms">
+          <p class="pj-label">Overview</p>
+          <p class="pj-summary">A mobile-first PWA for recording and organizing group trip expenses, with trip and member management, expense categories, per-trip currency selection, and editing or deleting of entries.</p>
+          <ul class="pj-stack" aria-label="Technologies"><li>React</li><li>Vite</li><li>Tailwind CSS</li><li>PWA</li><li>localStorage</li><li>Vitest</li><li>Vercel</li></ul>
+        </div>
+        <div class="tile pj-info" style="--d:240ms">
+          <p class="pj-label">Highlights</p>
+          <ul class="pj-points"><li>Implemented expense-splitting logic in integer minor units: each expense has its own payer and participants, shares always add up to the exact amount, and balances are amount paid minus share owed.</li><li>Added a settlement view showing who owes whom, JSON and CSV export, and Vitest unit tests for the calculation, settlement, and storage logic.</li></ul>
+          <p class="pj-links"><a href="https://apnaapna.online" target="_blank" rel="noopener noreferrer">Live site · apnaapna.online ↗</a><a href="https://github.com/Muhsinswabri/apna-apna" target="_blank" rel="noopener noreferrer">Repository ↗</a></p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services" id="services">
+  <div class="services-panel" id="servicesPanel">
+    <h2 class="services-title" id="servicesTitle">What I&nbsp;do</h2>
+    <ol class="service-list">
+      <li class="service" data-reveal>
+        <span class="service-num"><span>01</span></span>
+        <div class="service-body">
+          <span class="service-name">Software Development</span>
+          <span class="service-desc">Full-stack web applications on the MERN stack, from APIs to polished interfaces.</span>
+        </div>
+      </li>
+      <li class="service" data-reveal>
+        <span class="service-num"><span>02</span></span>
+        <div class="service-body">
+          <span class="service-name">Motion Graphics &amp; Video Editing</span>
+          <span class="service-desc">Edited videos, animated graphics and social clips that hold attention.</span>
+        </div>
+      </li>
+      <li class="service" data-reveal>
+        <span class="service-num"><span>03</span></span>
+        <div class="service-body">
+          <span class="service-name">Social Media Management</span>
+          <span class="service-desc">Content planning, publishing and growth for brands across social platforms.</span>
+        </div>
+      </li>
+      <li class="service" data-reveal>
+        <span class="service-num"><span>04</span></span>
+        <div class="service-body">
+          <span class="service-name">Graphic Design &amp; Branding</span>
+          <span class="service-desc">Logos, visual identities and graphics that make a brand instantly recognisable.</span>
+        </div>
+      </li>
+      <li class="service" data-reveal>
+        <span class="service-num"><span>05</span></span>
+        <div class="service-body">
+          <span class="service-name">AI &amp; Business Automation</span>
+          <span class="service-desc">AI agents and n8n workflows that automate support, bookings and follow-ups.</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact" data-reveal>
+  <div class="shape shape-bolt" data-parallax="-0.35" aria-hidden="true">
+    <div class="bob">
+      <svg viewBox="0 0 200 220">
+        <defs>
+          <linearGradient id="boltFace" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fbffc2" />
+            <stop offset="0.4" stop-color="#d8f04a" />
+            <stop offset="1" stop-color="#8fb417" />
+          </linearGradient>
+        </defs>
+        <path d="M128 14 44 124h52l-22 82 92-118h-54l30-74Z" fill="#5e7a0c" transform="translate(12 10)" />
+        <path d="M128 14 44 124h52l-22 82 92-118h-54l30-74Z" fill="url(#boltFace)" stroke="#f6ffd0" stroke-opacity="0.6" stroke-width="2" stroke-linejoin="round" />
+        <path d="M120 26 66 108" stroke="#fff" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="shape shape-swirl" data-parallax="-0.2" aria-hidden="true">
+    <div class="bob">
+      <svg viewBox="0 0 220 220">
+        <defs>
+          <linearGradient id="swirl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#d9ccff" />
+            <stop offset="0.45" stop-color="#8f6bff" />
+            <stop offset="1" stop-color="#4d22d6" />
+          </linearGradient>
+        </defs>
+        <g fill="url(#swirl)" stroke="#efe9ff" stroke-opacity="0.45" stroke-width="2">
+          <path d="M30 160c20-40 60-10 90-30s40-60 80-50c-10 30-30 40-50 60s-50 50-90 50c-14 0-26-12-30-30Z" opacity="0.75" />
+          <path d="M24 120c20-40 60-10 90-30s40-60 80-50c-10 30-30 40-50 60s-50 50-90 50c-14 0-26-12-30-30Z" opacity="0.88" />
+          <path d="M18 80c20-40 60-10 90-30s40-60 80-50c-10 30-30 40-50 60s-50 50-90 50c-14 0-26-12-30-30Z" />
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    <div>
+      <h2 class="contact-title">
+        <span class="line"><span style="--d:0ms">Let’s</span></span>
+        <span class="line"><span style="--d:120ms">get in</span></span>
+        <span class="line"><span style="--d:240ms">touch</span></span>
+      </h2>
+      <a class="contact-mail reveal" style="--d:400ms" href="mailto:swabri2004@gmail.com">swabri2004@gmail.com</a>
+    </div>
+    <!-- Sent by the script at the end of the page to /api/contact (api/contact.js), which
+         emails swabri2004@gmail.com. The hidden "company" field is a spam trap for bots. -->
+    <form class="contact-form reveal" style="--d:300ms" id="contactForm" data-endpoint="/api/contact" novalidate>
+      <label>Name<input name="name" autocomplete="name" maxlength="100" required /></label>
+      <label>Email<input name="email" type="email" autocomplete="email" maxlength="254" required /></label>
+      <label>Message<textarea name="message" rows="3" maxlength="5000" required></textarea></label>
+      <label class="contact-trap" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off" /></label>
+      <button class="btn" type="submit">Send message</button>
+      <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer" data-reveal>
+  <div class="footer-top">
+    <p class="footer-big">Let’s<br />talk</p>
+    <div class="footer-col">
+      <h3>Menu</h3>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h3>Contact</h3>
+      <a href="mailto:swabri2004@gmail.com">swabri2004@gmail.com</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Behance</a>
+    </div>
+  </div>
+
+  <div class="footer-shapes" aria-hidden="true">
+    <span class="gshape" style="--i:0"><svg viewBox="0 0 100 100"><g fill="#7b3bff"><circle cx="26" cy="26" r="20"/><circle cx="74" cy="26" r="20"/><circle cx="26" cy="74" r="20"/><circle cx="74" cy="74" r="20"/><rect x="30" y="30" width="40" height="40" transform="rotate(45 50 50)"/></g></svg></span>
+    <span class="gshape" style="--i:1"><svg viewBox="0 0 100 100"><g fill="#b6f04a"><circle cx="30" cy="30" r="22"/><circle cx="70" cy="30" r="22"/><circle cx="30" cy="70" r="22"/><circle cx="70" cy="70" r="22"/></g><circle cx="50" cy="50" r="12" fill="#050505"/></svg></span>
+    <span class="gshape" style="--i:2"><svg viewBox="0 0 100 100"><path d="M72 18A38 38 0 1 0 72 82" fill="none" stroke="#f1f1f1" stroke-width="26" stroke-linecap="round"/></svg></span>
+    <span class="gshape" style="--i:3"><svg viewBox="0 0 100 100"><g fill="#8a3cff"><circle cx="50" cy="16" r="16"/><circle cx="84" cy="50" r="16"/><circle cx="50" cy="84" r="16"/><circle cx="16" cy="50" r="16"/><circle cx="26" cy="26" r="16"/><circle cx="74" cy="26" r="16"/><circle cx="26" cy="74" r="16"/><circle cx="74" cy="74" r="16"/><circle cx="50" cy="50" r="30"/></g></svg></span>
+    <span class="gshape" style="--i:4"><svg viewBox="0 0 100 100"><path d="M8 12h84L46 50h46L8 88l38-38H8Z" fill="#f1f1f1" stroke="#f1f1f1" stroke-width="4" stroke-linejoin="round"/></svg></span>
+    <span class="gshape" style="--i:5"><svg viewBox="0 0 100 100"><path d="M8 10 50 40 92 10v80L50 60 8 90Z" fill="#ff9a2e" stroke="#ff9a2e" stroke-width="6" stroke-linejoin="round"/></svg></span>
+    <span class="gshape" style="--i:6"><svg viewBox="0 0 100 100"><g fill="#f1f1f1" stroke="#f1f1f1" stroke-width="4" stroke-linejoin="round"><path d="M50 6 94 48H72L50 28 28 48H6Z"/><path d="M50 50 94 94H6Z"/></g></svg></span>
+    <span class="gshape" style="--i:7"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="none" stroke="#ff2fd0" stroke-width="26"/></svg></span>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Swabri</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<!-- Hero avatar. avatar3d.js lazy-loads Three.js after the page has loaded; if anything fails, the poster image stays. -->
+<script defer src="avatar-portrait-rig.js"></script>
+<script defer src="avatar3d.js"></script>
+<script>
+  // Split headings into letters so each one can rise in turn.
+  document.querySelectorAll("[data-split]").forEach((el) => {
+    const words = el.textContent.trim().split(" ");
+    el.textContent = "";
+    let i = 0;
+    words.forEach((word, w) => {
+      const wrap = document.createElement("span");
+      wrap.className = "split";
+      [...word].forEach((ch) => {
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.textContent = ch;
+        s.style.setProperty("--i", i++);
+        wrap.appendChild(s);
+      });
+      el.appendChild(wrap);
+      if (w < words.length - 1) el.appendChild(document.createTextNode(" "));
+    });
+  });
+
+  // Play each section's entrance once it scrolls into view.
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+    }),
+    { threshold: 0.18 },
+  );
+  document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+  requestAnimationFrame(() => document.querySelector(".hero").classList.add("is-in"));
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Eased pointer (also drives the floating shapes below) and the hero scroll progress for the
+  // avatar stage. The character itself is the Three.js scene in avatar3d.js.
+  const tilt = document.getElementById("avatarStage");
+  const cursor = document.querySelector(".cursor");
+  const target = { x: 0, y: 0 };
+  const current = { x: 0, y: 0 };
+  let lastMove = -Infinity;
+  window.addEventListener("pointermove", (ev) => {
+    cursor.style.transform = `translate(${ev.clientX}px, ${ev.clientY}px)`;
+    target.x = (ev.clientX / window.innerWidth) * 2 - 1;
+    target.y = (ev.clientY / window.innerHeight) * 2 - 1;
+    lastMove = performance.now();
+  });
+  function animateAvatar(time) {
+    const idle = time - lastMove > 2500;
+    const tx = idle ? Math.sin(time / 1700) * 0.5 : target.x;
+    const ty = idle ? Math.sin(time / 2600) * 0.25 : target.y;
+    current.x += (tx - current.x) * 0.06;
+    current.y += (ty - current.y) * 0.06;
+    const scroll = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9)));
+    tilt.style.setProperty("--s", scroll.toFixed(3));
+    requestAnimationFrame(animateAvatar);
+  }
+  if (!reduce) requestAnimationFrame(animateAvatar);
+
+  // Services: the light panel grows to full width, and the heading fills grey → black, with scroll.
+  const servicesPanel = document.getElementById("servicesPanel");
+  const servicesTitle = document.getElementById("servicesTitle");
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  function updateServices() {
+    const vh = window.innerHeight;
+    const panelTop = servicesPanel.getBoundingClientRect().top;
+    servicesPanel.style.setProperty("--p", reduce ? 1 : clamp01((vh - panelTop) / (vh * 0.75)).toFixed(3));
+    const titleTop = servicesTitle.getBoundingClientRect().top;
+    servicesTitle.style.setProperty("--f", reduce ? 1 : clamp01((vh * 0.85 - titleTop) / (vh * 0.55)).toFixed(3));
+  }
+  window.addEventListener("scroll", () => requestAnimationFrame(updateServices), { passive: true });
+  window.addEventListener("resize", updateServices);
+  updateServices();
+
+  // Floating 3D shapes: drift at different speeds while scrolling (capped, so they stay near their
+  // spot), and shift and turn toward the mouse by their depth, using the avatar's eased pointer.
+  const shapes = [...document.querySelectorAll("[data-parallax]")];
+  const MAX_DRIFT = 140;
+  function animateShapes() {
+    const vh = window.innerHeight;
+    for (const s of shapes) {
+      const rect = s.parentElement.getBoundingClientRect();
+      if (rect.bottom < -200 || rect.top > vh + 200) continue; // off screen: skip
+      const drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, (rect.top + rect.height / 2 - vh / 2) * parseFloat(s.dataset.parallax)));
+      const depth = parseFloat(s.dataset.depth || "1");
+      const mx = current.x * depth, my = current.y * depth;
+      s.style.transform =
+        `perspective(800px) translate3d(${(mx * 26).toFixed(1)}px, ${(drift + my * 18).toFixed(1)}px, 0) ` +
+        `rotateY(${(mx * 28).toFixed(1)}deg) rotateX(${(-my * 22).toFixed(1)}deg)`;
+    }
+    requestAnimationFrame(animateShapes);
+  }
+  if (!reduce) requestAnimationFrame(animateShapes);
+
+  // Contact form: POST to the email endpoint (api/contact.js) and report the real result.
+  // If the endpoint is unreachable (page opened from disk, static host without the function,
+  // email service not configured), say so and offer the address directly.
+  const contactForm = document.getElementById("contactForm");
+  const contactStatus = document.getElementById("contactStatus");
+  const CONTACT_EMAIL = "swabri2004@gmail.com";
+  function showContactStatus(text, isError) {
+    contactStatus.classList.toggle("is-error", isError);
+    contactStatus.textContent = text;
+    if (isError) {
+      const link = document.createElement("a");
+      link.href = "mailto:" + CONTACT_EMAIL;
+      link.textContent = CONTACT_EMAIL;
+      contactStatus.append(" Please email me at ", link, ".");
+    }
+  }
+  contactForm.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const button = contactForm.querySelector("button");
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = "Sending…";
+    showContactStatus("", false);
+    const data = Object.fromEntries(new FormData(contactForm));
+    try {
+      const res = await fetch(contactForm.dataset.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(data),
+      });
+      const reply = await res.json().catch(() => ({}));
+      if (!res.ok || !reply.ok) throw new Error(reply.error || "HTTP " + res.status);
+      contactForm.reset();
+      button.textContent = "Sent ✓";
+      showContactStatus("Thanks! Your message has been sent. I’ll get back to you soon.", false);
+      setTimeout(() => { button.textContent = label; button.disabled = false; }, 4000);
+    } catch (err) {
+      console.warn("Contact form:", err);
+      button.textContent = label;
+      button.disabled = false;
+      showContactStatus("Sorry, your message couldn’t be sent right now.", true);
+    }
+  });
+
+  // Project stack: give each card its height (--h), so a card taller than the screen sticks only
+  // once it is fully in view (see .project-card in the CSS). Setting a custom property does not
+  // change the card's size, so the observer never loops.
+  const projectCards = document.querySelectorAll(".project-card");
+  const setCardHeight = (card) => card.style.setProperty("--h", card.offsetHeight + "px");
+  if ("ResizeObserver" in window) {
+    const cardSizes = new ResizeObserver((entries) => entries.forEach((e) => setCardHeight(e.target)));
+    projectCards.forEach((card) => cardSizes.observe(card));
+  } else {
+    projectCards.forEach(setCardHeight);
+    window.addEventListener("resize", () => projectCards.forEach(setCardHeight));
+  }
+</script>
+</body>
+</html>

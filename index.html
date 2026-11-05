@@ -926,31 +926,109 @@
   .footer-col a { display: block; width: fit-content; padding: 4px 0; font-size: 14px; color: var(--muted); transition: color 0.3s, transform 0.3s var(--ease-out); }
   .footer-col a:hover { color: #fff; transform: translateX(6px); }
 
-  /* The row of colourful geometric shapes across the bottom. */
-  .footer-shapes {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 1.4vw;
-    margin-top: 10vh;
-  }
-  .gshape { display: block; aspect-ratio: 1; }
-  .gshape svg {
-    width: 100%;
-    height: 100%;
+  /* The row of six geometric symbols ("Creative Digital Signature") across the bottom. */
+  .footer-signature { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3.2vw; margin-top: 10vh; padding: 0 1.5vw; }
+  .sig {
+    position: relative;
     display: block;
-    transform: translateY(120%) rotate(-120deg) scale(0.6);
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--c);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;     /* a tap is a tap; swipes still scroll the page */
+  }
+  .sig:focus-visible { outline: 2px solid #fff; outline-offset: 8px; border-radius: 14px; }
+  .sig svg { width: 100%; height: 100%; display: block; overflow: visible; fill: currentColor; transition: filter 0.45s ease; }
+  .sig svg * { transform-box: fill-box; transform-origin: center; }
+  .sig .c2 { fill: var(--c2); }
+  .sig .ln { fill: none; stroke: currentColor; stroke-linecap: round; }
+  .sig .ln.c2 { fill: none; stroke: var(--c2); }
+  .sig .ghost { opacity: 0.38; }
+  .sig .ghost2 { opacity: 0.16; }
+
+  /* Entrance: the symbols drop and spin into place as the footer is revealed. */
+  .sig .art {
+    transform: translateY(80%) rotate(-110deg) scale(0.55);
     opacity: 0;
     transition: transform 1.1s var(--ease-back), opacity 0.6s ease;
     transition-delay: calc(var(--i) * 90ms);
   }
-  .site-footer.is-in .gshape svg { transform: none; opacity: 1; }
-  .gshape:hover svg { animation: wobble 0.9s var(--ease-back); }
-  @keyframes wobble {
-    0% { transform: rotate(0) scale(1); }
-    40% { transform: rotate(25deg) scale(1.12); }
-    70% { transform: rotate(-10deg) scale(0.96); }
-    100% { transform: rotate(0) scale(1); }
+  .site-footer.is-in .sig .art { transform: none; opacity: 1; }
+
+  /* Glow + slight lift while active (hover on mouse devices; tap / keyboard focus everywhere). */
+  .sig svg { transform: translateZ(0); }
+  @media (hover: hover) {
+    .sig:hover svg { filter: drop-shadow(0 0 16px color-mix(in srgb, var(--c) 65%, transparent)) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55)); }
   }
+  .sig.is-active svg, .sig:focus-visible svg { filter: drop-shadow(0 0 16px color-mix(in srgb, var(--c) 65%, transparent)) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55)); }
+
+  /* ---------- each symbol's own animation ----------
+     Runs on hover (mouse) or when the script adds .play (tap / Enter / Space), which it
+     re-adds on every tap so the animation replays. */
+  .sig .p { animation-duration: 0.95s; animation-timing-function: var(--ease-back); animation-fill-mode: both; }
+
+  /* 01 Software development: brackets open, the module turns into place. */
+  .s-code :is(.bl, .br) { animation-timing-function: var(--ease-out); }
+  @keyframes code-l { 0%, 100% { transform: none; } 40% { transform: translateX(-16%); } }
+  @keyframes code-r { 0%, 100% { transform: none; } 40% { transform: translateX(16%); } }
+  @keyframes code-mod { 0% { transform: none; } 45% { transform: rotate(135deg) scale(1.35); } 100% { transform: rotate(180deg); } }
+
+  /* 02 AI & automation: a signal runs out from the core through each link to each node. */
+  @keyframes ai-core { 0%, 100% { transform: none; } 30% { transform: scale(1.45); } }
+  @keyframes ai-link { 0%, 100% { opacity: 1; } 35% { opacity: 0.2; } }
+  @keyframes ai-node { 0%, 100% { transform: none; } 45% { transform: scale(1.25); } }
+
+  /* 03 Motion & video: the play shape pushes forward, its trail snaps in behind it. */
+  @keyframes mo-push { 0%, 100% { transform: none; } 35% { transform: translateX(14%) skewX(-8deg); } 65% { transform: translateX(-3%); } }
+  @keyframes mo-trail { 0%, 100% { transform: none; } 35% { transform: translateX(38%); opacity: 0; } 60% { transform: translateX(-12%); } }
+
+  /* 04 Marketing & social: waves broadcast outward and the growth wedge climbs. */
+  .s-reach .wave { transform-origin: 0% 100%; stroke-linecap: butt; }
+  .s-reach .dot { transform-origin: 0% 100%; }
+  @keyframes re-wave { 0%, 100% { transform: none; opacity: 1; } 40% { transform: scale(1.18); opacity: 0.25; } }
+  @keyframes re-dot { 0%, 100% { transform: none; } 30% { transform: scale(1.4); } }
+  @keyframes re-up { 0%, 100% { transform: none; } 40% { transform: translate(14%, -14%) scale(1.15); } }
+
+  /* 05 Design & branding: the composition rearranges itself and settles back. */
+  @keyframes de-sq { 0% { transform: none; } 50% { transform: rotate(90deg) scale(0.86); } 100% { transform: rotate(180deg); } }
+  @keyframes de-ring { 0%, 100% { transform: none; } 45% { transform: translate(34%, 34%); } }
+  @keyframes de-tri { 0% { transform: none; } 100% { transform: rotate(-360deg); } }
+
+  /* 06 Digital interaction: the pointer clicks and a ripple spreads from its tip. */
+  .s-click .cur { transform-origin: 0% 0%; }
+  @keyframes cl-press { 0%, 100% { transform: none; } 25% { transform: scale(0.84); } 50% { transform: scale(1.05); } }
+  @keyframes cl-ripple { 0%, 100% { transform: none; opacity: 1; } 15% { transform: scale(0.7); } 55% { transform: scale(2.1); opacity: 0; } 56% { transform: scale(0.4); opacity: 0; } }
+
+  @media (hover: hover) {
+    .s-code:hover .bl { animation-name: code-l; }   .s-code:hover .br { animation-name: code-r; }   .s-code:hover .mod { animation-name: code-mod; }
+    .s-ai:hover .core { animation-name: ai-core; }  .s-ai:hover .lk { animation-name: ai-link; }    .s-ai:hover .nd { animation-name: ai-node; }
+    .s-motion:hover .main { animation-name: mo-push; } .s-motion:hover .trail { animation-name: mo-trail; }
+    .s-reach:hover .wave { animation-name: re-wave; } .s-reach:hover .dot { animation-name: re-dot; } .s-reach:hover .up { animation-name: re-up; }
+    .s-design:hover .sq { animation-name: de-sq; }  .s-design:hover .ring { animation-name: de-ring; } .s-design:hover .tri { animation-name: de-tri; }
+    .s-click:hover .cur { animation-name: cl-press; } .s-click:hover .rip { animation-name: cl-ripple; }
+  }
+  .s-code.play .bl { animation-name: code-l; }   .s-code.play .br { animation-name: code-r; }   .s-code.play .mod { animation-name: code-mod; }
+  .s-ai.play .core { animation-name: ai-core; }  .s-ai.play .lk { animation-name: ai-link; }    .s-ai.play .nd { animation-name: ai-node; }
+  .s-motion.play .main { animation-name: mo-push; } .s-motion.play .trail { animation-name: mo-trail; }
+  .s-reach.play .wave { animation-name: re-wave; } .s-reach.play .dot { animation-name: re-dot; } .s-reach.play .up { animation-name: re-up; }
+  .s-design.play .sq { animation-name: de-sq; }  .s-design.play .ring { animation-name: de-ring; } .s-design.play .tri { animation-name: de-tri; }
+  .s-click.play .cur { animation-name: cl-press; } .s-click.play .rip { animation-name: cl-ripple; }
+
+  /* Staggers. */
+  .s-ai .lk:nth-of-type(2), .s-ai .nd:nth-of-type(2) { animation-delay: 0.08s; }
+  .s-ai .lk:nth-of-type(3), .s-ai .nd:nth-of-type(3) { animation-delay: 0.16s; }
+  .s-ai .nd { animation-delay: 0.18s; }
+  .s-ai .nd:nth-of-type(2) { animation-delay: 0.26s; }
+  .s-ai .nd:nth-of-type(3) { animation-delay: 0.34s; }
+  .s-motion .trail.ghost2 { animation-delay: 0.07s; }
+  .s-reach .wave.w2 { animation-delay: 0.12s; }
+  .s-reach .up { animation-delay: 0.1s; }
+  .s-design .ring { animation-duration: 1.1s; }
+  .s-click .rip { animation-duration: 1.1s; animation-timing-function: var(--ease-out); }
   .footer-bottom {
     display: flex;
     justify-content: space-between;
@@ -969,7 +1047,7 @@
     .site-footer { padding: 10vh 16px 4vh; border-radius: 32px 32px 0 0; }
     .footer-top { grid-template-columns: 1fr 1fr; }
     .footer-big { grid-column: 1 / -1; }
-    .footer-shapes { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .footer-signature { grid-template-columns: repeat(3, 1fr); gap: 34px 26px; padding: 0 10px; }
   }
 
   /* Custom cursor glow. */
@@ -1389,15 +1467,68 @@
     </div>
   </div>
 
-  <div class="footer-shapes" aria-hidden="true">
-    <span class="gshape" style="--i:0"><svg viewBox="0 0 100 100"><g fill="#7b3bff"><circle cx="26" cy="26" r="20"/><circle cx="74" cy="26" r="20"/><circle cx="26" cy="74" r="20"/><circle cx="74" cy="74" r="20"/><rect x="30" y="30" width="40" height="40" transform="rotate(45 50 50)"/></g></svg></span>
-    <span class="gshape" style="--i:1"><svg viewBox="0 0 100 100"><g fill="#b6f04a"><circle cx="30" cy="30" r="22"/><circle cx="70" cy="30" r="22"/><circle cx="30" cy="70" r="22"/><circle cx="70" cy="70" r="22"/></g><circle cx="50" cy="50" r="12" fill="#050505"/></svg></span>
-    <span class="gshape" style="--i:2"><svg viewBox="0 0 100 100"><path d="M72 18A38 38 0 1 0 72 82" fill="none" stroke="#f1f1f1" stroke-width="26" stroke-linecap="round"/></svg></span>
-    <span class="gshape" style="--i:3"><svg viewBox="0 0 100 100"><g fill="#8a3cff"><circle cx="50" cy="16" r="16"/><circle cx="84" cy="50" r="16"/><circle cx="50" cy="84" r="16"/><circle cx="16" cy="50" r="16"/><circle cx="26" cy="26" r="16"/><circle cx="74" cy="26" r="16"/><circle cx="26" cy="74" r="16"/><circle cx="74" cy="74" r="16"/><circle cx="50" cy="50" r="30"/></g></svg></span>
-    <span class="gshape" style="--i:4"><svg viewBox="0 0 100 100"><path d="M8 12h84L46 50h46L8 88l38-38H8Z" fill="#f1f1f1" stroke="#f1f1f1" stroke-width="4" stroke-linejoin="round"/></svg></span>
-    <span class="gshape" style="--i:5"><svg viewBox="0 0 100 100"><path d="M8 10 50 40 92 10v80L50 60 8 90Z" fill="#ff9a2e" stroke="#ff9a2e" stroke-width="6" stroke-linejoin="round"/></svg></span>
-    <span class="gshape" style="--i:6"><svg viewBox="0 0 100 100"><g fill="#f1f1f1" stroke="#f1f1f1" stroke-width="4" stroke-linejoin="round"><path d="M50 6 94 48H72L50 28 28 48H6Z"/><path d="M50 50 94 94H6Z"/></g></svg></span>
-    <span class="gshape" style="--i:7"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="none" stroke="#ff2fd0" stroke-width="26"/></svg></span>
+  <!-- Creative Digital Signature: six symbols, one per area of work (code, AI, motion, marketing,
+       design, interaction). Each plays its own animation on hover, or on tap on touch screens. -->
+  <div class="footer-signature" role="group" aria-label="What I do">
+    <button type="button" class="sig s-code" style="--i:0; --c:#7b3bff; --c2:#b6f04a" aria-label="Software Development">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <polygon class="p bl" points="30,10 49,10 23,50 49,90 30,90 4,50"/>
+        <polygon class="p br" points="70,10 51,10 77,50 51,90 70,90 96,50"/>
+        <polygon class="p mod c2" points="50,33 67,50 50,67 33,50"/>
+        </g>
+      </svg>
+    </button>
+    <button type="button" class="sig s-ai" style="--i:1; --c:#b6f04a; --c2:#7b3bff" aria-label="AI &amp; Business Automation">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <line class="p ln lk" x1="50" y1="50" x2="20" y2="20" stroke-width="10"/>
+        <line class="p ln lk" x1="50" y1="50" x2="82" y2="24" stroke-width="10"/>
+        <line class="p ln lk" x1="50" y1="50" x2="46" y2="86" stroke-width="10"/>
+        <circle class="p nd" cx="20" cy="20" r="15"/>
+        <circle class="p nd" cx="82" cy="24" r="12"/>
+        <circle class="p nd" cx="46" cy="84" r="13"/>
+        <circle class="p core c2" cx="50" cy="50" r="13"/>
+        <circle cx="50" cy="50" r="4.5" fill="var(--bg)"/>
+        </g>
+      </svg>
+    </button>
+    <button type="button" class="sig s-motion" style="--i:2; --c:#ff9a2e; --c2:#f1f1f1" aria-label="Motion Graphics &amp; Video">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <polygon class="p trail ghost2 c2" points="4,22 30,50 4,78"/>
+        <polygon class="p trail ghost c2" points="16,16 46,50 16,84"/>
+        <polygon class="p main" points="34,10 96,50 34,90"/>
+        </g>
+      </svg>
+    </button>
+    <button type="button" class="sig s-reach" style="--i:3; --c:#f1f1f1; --c2:#ff9a2e" aria-label="Digital Marketing &amp; Social">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <path class="p dot c2" d="M10 64A26 26 0 0 1 36 90H10Z"/>
+        <path class="p ln wave w1" d="M10 47A43 43 0 0 1 53 90" stroke-width="14"/>
+        <path class="p ln wave w2" d="M10 21A69 69 0 0 1 79 90" stroke-width="14"/>
+        <polygon class="p up c2" points="68,6 94,6 94,32"/>
+        </g>
+      </svg>
+    </button>
+    <button type="button" class="sig s-design" style="--i:4; --c:#7b3bff; --c2:#ff9a2e" aria-label="Graphic Design &amp; Branding">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <rect class="p sq" x="42" y="42" width="50" height="50" rx="4"/>
+        <polygon class="p tri" points="8,94 36,94 22,68"/>
+        <circle class="p ring ln c2" cx="34" cy="34" r="23" stroke-width="13"/>
+        </g>
+      </svg>
+    </button>
+    <button type="button" class="sig s-click" style="--i:5; --c:#b6f04a; --c2:#f1f1f1" aria-label="Digital Interaction">
+      <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <g class="art">
+        <circle class="p rip ln c2" cx="24" cy="20" r="15" stroke-width="7"/>
+        <path class="p cur" d="M24 20L84 52 59 59 75 87 62 94 46 65 28 82Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+        </g>
+      </svg>
+    </button>
   </div>
 
   <div class="footer-bottom">
@@ -1463,6 +1594,29 @@
   window.addEventListener("hashchange", () => setTimeout(revealPassed, 50));
   window.addEventListener("beforeprint", () => [...pending].forEach(reveal));
   requestAnimationFrame(() => document.querySelector(".hero").classList.add("is-in"));
+
+  // Footer symbols: hover plays them with a mouse (CSS). A tap, click, Enter or Space adds .play
+  // (re-added each time so it replays) and .is-active (the glow). Tapping elsewhere clears it.
+  let activeSig = null;
+  const clearSig = () => { if (activeSig) activeSig.classList.remove("is-active", "play"); activeSig = null; };
+  document.querySelectorAll(".sig").forEach((sig) => {
+    sig.addEventListener("click", () => {
+      if (activeSig && activeSig !== sig) clearSig();
+      activeSig = sig;
+      sig.classList.remove("play");
+      void sig.offsetWidth;            // restart the animation
+      sig.classList.add("is-active", "play");
+    });
+    // .play comes off once every part has finished, so the next tap replays from the start.
+    sig.addEventListener("animationend", () => {
+      if (!sig.getAnimations || sig.getAnimations({ subtree: true }).every((a) => a.playState !== "running" || a instanceof CSSTransition)) sig.classList.remove("play");
+    });
+    // A mouse leaving drops the click state, so hover and click never stick together.
+    sig.addEventListener("pointerleave", (ev) => { if (ev.pointerType === "mouse" && sig === activeSig) clearSig(); });
+  });
+  // pointerdown, not click: iOS fires no click on plain text or empty space.
+  document.addEventListener("pointerdown", (ev) => { if (activeSig && !activeSig.contains(ev.target)) clearSig(); });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") clearSig(); });
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

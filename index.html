@@ -969,7 +969,7 @@
 
   /* ---------- responsive ---------- */
   @media (max-width: 760px) {
-    .hero { padding: 20px 16px 0; }
+    .hero { padding: 20px 16px 88px; }   /* room for the "Scroll" hint (text + line) under the button */
     .nav { font-size: 11px; }
     .hero-title { margin-top: 6vh; }
     .hero-row { grid-template-columns: 1fr; justify-items: center; text-align: center; margin-top: 0; }
@@ -988,9 +988,47 @@
     .project-card .pj-visual { height: 380px; }
     .project-card .card-head { flex-wrap: wrap; }
     .project-card .card-link { margin-left: 0; }
-    .pv-mock-body { padding: 52px 4% 18px; }
+    /* Mockups stack (chat, then its panel) in a tile that grows to fit, instead of squeezing two
+       columns into a phone-width tile. Screenshot tiles keep their fixed height. */
+    .project-card .pj-visual:has(.pv-mock) { height: auto; }
+    .pv-mock { position: relative; inset: auto; }
+    .pv-mock-body { flex-direction: column; padding: 56px 16px 22px; height: auto; }
+    .pv-chat, .pv-side { width: min(100%, 300px); }
+    .pv-scan { width: min(70%, 220px); }
+    .pv-chat, .pv-side { font-size: 12.5px; }
     .shape-star { left: 2vw; }
     .cursor { display: none; }
+  }
+
+  /* ---------- small phones ---------- */
+  @media (max-width: 760px) {
+    /* "Projects" at its 54px minimum is wider than a 320px screen; scale it down below ~375px. */
+    .projects-title { font-size: min(54px, 14.4vw); }
+  }
+
+  /* ---------- touch screens ---------- */
+  @media (pointer: coarse) {
+    /* Comfortable tap targets (about 44px) without moving anything: padding grows the hit area,
+       an equal negative margin keeps the layout where it was. */
+    .nav a { padding: 16px 6px; margin: -16px -6px; }
+    .footer-col a { padding: 13px 0; }
+    .footer-bottom a, .contact-mail { padding: 14px 0; margin: -14px 0; }
+    .contact-mail { margin-top: 8px; }
+    /* Underlined text links: an invisible larger hit area, so the underline stays put. */
+    .pj-links a { position: relative; }
+    .pj-links a::before { content: ""; position: absolute; inset: -14px -6px; }
+    .card-link { min-height: 44px; display: inline-flex; align-items: center; }
+    /* Hover-only feedback gets a touch equivalent while the finger is down. */
+    .social-card:active { scale: 1.045; box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 55%, transparent), 0 12px 40px -6px color-mix(in srgb, var(--brand) 55%, transparent); }
+    .social-card:active::before { opacity: 1; }
+    .social-card:active .social-logo { transform: scale(1.1) translateY(-4px); }
+    .card-link:active, .btn:active { transform: scale(0.97); }
+  }
+  /* Without hover, the project screenshots rise into place as each card is revealed, standing in
+     for the hover lift on desktop. */
+  @media (hover: none) {
+    .pv-phone { transform: translateY(14%); transition: transform 1.4s var(--ease-out) 0.25s; }
+    .card.is-in .pv-phone { transform: translateY(0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1327,9 +1365,9 @@
     <div class="footer-col">
       <h3>Contact</h3>
       <a href="mailto:swabri2004@gmail.com">swabri2004@gmail.com</a>
-      <a href="#">Instagram</a>
-      <a href="#">LinkedIn</a>
-      <a href="#">Behance</a>
+      <a href="https://www.instagram.com/_muhsinswabri_?srtk=Ynk0b2Qyd3hvMThw&amp;utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://www.linkedin.com/in/muhsinswabri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://github.com/Muhsinswabri" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 
@@ -1375,13 +1413,34 @@
   });
 
   // Play each section's entrance once it scrolls into view.
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
-    }),
-    { threshold: 0.18 },
-  );
-  document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+  // - Triggers when an element's top passes 88% of the screen height, whatever the element's size
+  //   (a ratio threshold made tall elements, like project cards on phones, appear late or never).
+  // - Anything already above the screen is revealed too: after a reload that restores the scroll
+  //   position, a #link jump, or a fast fling, nothing is left invisible when scrolling back up.
+  // - Printing reveals everything.
+  const pending = new Set(document.querySelectorAll("[data-reveal]"));
+  const reveal = (el) => { el.classList.add("is-in"); pending.delete(el); };
+  const revealPassed = () => {
+    for (const el of pending) if (el.getBoundingClientRect().top < window.innerHeight * 0.88) { reveal(el); io && io.unobserve(el); }
+  };
+  const io = "IntersectionObserver" in window
+    ? new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting || e.boundingClientRect.bottom < 0) { reveal(e.target); io.unobserve(e.target); }
+        }),
+        { threshold: 0, rootMargin: "0px 0px -12% 0px" },
+      )
+    : null;
+  if (io) pending.forEach((el) => io.observe(el));
+  else pending.forEach(reveal);
+  let revealQueued = false;
+  window.addEventListener("scroll", () => {
+    if (revealQueued || !pending.size) return;
+    revealQueued = true;
+    setTimeout(() => { revealQueued = false; revealPassed(); }, 150);
+  }, { passive: true });
+  window.addEventListener("hashchange", () => setTimeout(revealPassed, 50));
+  window.addEventListener("beforeprint", () => [...pending].forEach(reveal));
   requestAnimationFrame(() => document.querySelector(".hero").classList.add("is-in"));
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1405,10 +1464,12 @@
     const ty = idle ? Math.sin(time / 2600) * 0.25 : target.y;
     current.x += (tx - current.x) * 0.06;
     current.y += (ty - current.y) * 0.06;
-    const scroll = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9)));
-    tilt.style.setProperty("--s", scroll.toFixed(3));
+    // Only touch the style when the value changes (it is constant once the hero is scrolled past).
+    const scroll = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9))).toFixed(3);
+    if (scroll !== lastScroll) { tilt.style.setProperty("--s", scroll); lastScroll = scroll; }
     requestAnimationFrame(animateAvatar);
   }
+  let lastScroll = "";
   if (!reduce) requestAnimationFrame(animateAvatar);
 
   // Services: the light panel grows to full width, and the heading fills grey → black, with scroll.
@@ -1422,26 +1483,36 @@
     const titleTop = servicesTitle.getBoundingClientRect().top;
     servicesTitle.style.setProperty("--f", reduce ? 1 : clamp01((vh * 0.85 - titleTop) / (vh * 0.55)).toFixed(3));
   }
-  window.addEventListener("scroll", () => requestAnimationFrame(updateServices), { passive: true });
+  let servicesQueued = false;   // at most one update per frame, however many scroll events arrive
+  window.addEventListener("scroll", () => {
+    if (servicesQueued) return;
+    servicesQueued = true;
+    requestAnimationFrame(() => { servicesQueued = false; updateServices(); });
+  }, { passive: true });
   window.addEventListener("resize", updateServices);
   updateServices();
 
   // Floating 3D shapes: drift at different speeds while scrolling (capped, so they stay near their
   // spot), and shift and turn toward the mouse by their depth, using the avatar's eased pointer.
   const shapes = [...document.querySelectorAll("[data-parallax]")];
-  const MAX_DRIFT = 140;
+  // Scroll drift cap: smaller on phones, where 140px lifts a shape over the section above.
+  let MAX_DRIFT = window.innerWidth <= 760 ? 50 : 140;
+  window.addEventListener("resize", () => { MAX_DRIFT = window.innerWidth <= 760 ? 50 : 140; });
+  const shapeData = shapes.map((s) => ({ el: s, parallax: parseFloat(s.dataset.parallax), depth: parseFloat(s.dataset.depth || "1"), last: "" }));
   function animateShapes() {
     const vh = window.innerHeight;
-    for (const s of shapes) {
-      const rect = s.parentElement.getBoundingClientRect();
-      if (rect.bottom < -200 || rect.top > vh + 200) continue; // off screen: skip
-      const drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, (rect.top + rect.height / 2 - vh / 2) * parseFloat(s.dataset.parallax)));
-      const depth = parseFloat(s.dataset.depth || "1");
-      const mx = current.x * depth, my = current.y * depth;
-      s.style.transform =
+    // Read every position first, then write, so the browser lays the page out once per frame.
+    const rects = shapeData.map((d) => d.el.parentElement.getBoundingClientRect());
+    shapeData.forEach((d, i) => {
+      const rect = rects[i];
+      if (rect.bottom < -200 || rect.top > vh + 200) return; // off screen: skip
+      const drift = Math.max(-MAX_DRIFT, Math.min(MAX_DRIFT, (rect.top + rect.height / 2 - vh / 2) * d.parallax));
+      const mx = current.x * d.depth, my = current.y * d.depth;
+      const t =
         `perspective(800px) translate3d(${(mx * 26).toFixed(1)}px, ${(drift + my * 18).toFixed(1)}px, 0) ` +
         `rotateY(${(mx * 28).toFixed(1)}deg) rotateX(${(-my * 22).toFixed(1)}deg)`;
-    }
+      if (t !== d.last) { d.el.style.transform = t; d.last = t; }
+    });
     requestAnimationFrame(animateShapes);
   }
   if (!reduce) requestAnimationFrame(animateShapes);

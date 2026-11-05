@@ -58,6 +58,11 @@
     background-clip: text;
   }
   .is-in .split .ch { transform: translateY(0); }
+  /* Safari/iOS (WebKit) does not paint a parent's background-clip:text through child elements,
+     and each letter is its own transformed span, so silver letters need the gradient themselves
+     (it is vertical, so per-letter it looks the same). "inherit" above would only copy the
+     unstyled .split wrapper's empty background. */
+  .silver .split .ch { background-image: var(--silver); }   /* not the shorthand: it would reset background-clip */
 
   .btn {
     position: relative;
@@ -360,7 +365,8 @@
     /* No movement: show the list once, wrapped and centred. */
     .tech-marquee .logo-strip { width: auto; }
     .tech-marquee .tech-list { flex-wrap: wrap; justify-content: center; row-gap: 22px; }
-    .tech-marquee [aria-hidden="true"] { display: none; }
+    /* Only the duplicate copy of the list; the icons inside items are aria-hidden too. */
+    .tech-marquee .logo-strip > [aria-hidden="true"] { display: none; }
     .customers .tech-marquee { -webkit-mask-image: none; mask-image: none; }
   }
   @keyframes marquee { to { transform: translateX(-50%); } }
@@ -446,8 +452,20 @@
   .social-card:hover::before { opacity: 1; }
   .social-card:hover .social-logo { transform: scale(1.1) translateY(-4px); filter: drop-shadow(0 14px 36px color-mix(in srgb, var(--brand) 70%, transparent)); }
   @media (prefers-reduced-motion: reduce) {
-    .social-gallery .gallery-row { width: auto; flex-wrap: wrap; justify-content: center; row-gap: 18px; }
-    .social-gallery [aria-hidden="true"] { display: none; }
+    /* No scrolling row: the four cards once, as a grid (2 x 2 on phones, 4 across on wide screens).
+       Only the loop copies are hidden; the logos inside the cards are aria-hidden too. */
+    .social-gallery .gallery-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(150px, 40vw), 1fr));
+      gap: 16px;
+      width: 100%;          /* explicit: auto margins in the flex column would shrink-wrap it */
+      max-width: 1100px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .social-gallery .gallery-row > [aria-hidden="true"] { display: none; }
+    .social-gallery .social-card { width: auto; margin-right: 0; }
   }
   .gallery-tile::after { /* thin glass edge */
     content: "";
@@ -1418,8 +1436,11 @@
   // - Anything already above the screen is revealed too: after a reload that restores the scroll
   //   position, a #link jump, or a fast fling, nothing is left invisible when scrolling back up.
   // - Printing reveals everything.
+  // - With "Reduce Motion" on, entrances have no movement anyway, so everything is shown at once
+  //   instead of waiting to be scrolled to.
   const pending = new Set(document.querySelectorAll("[data-reveal]"));
   const reveal = (el) => { el.classList.add("is-in"); pending.delete(el); };
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) [...pending].forEach(reveal);
   const revealPassed = () => {
     for (const el of pending) if (el.getBoundingClientRect().top < window.innerHeight * 0.88) { reveal(el); io && io.unobserve(el); }
   };

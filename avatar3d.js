@@ -35,7 +35,9 @@
  * Touch devices: the eyes and head follow the finger while it touches the page (and for a moment
  * after), plus the idle behaviour, occasional curious look-arounds, and the tap reaction.
  * Opened straight from disk (file://), the picture comes from images/swabri-avatar.data.js.
- * With prefers-reduced-motion the poster stays and nothing loads.
+ * With prefers-reduced-motion ("Reduce Motion" on iOS) the character still loads, in a calm mode:
+ * it keeps eye contact, follows the cursor or finger and blinks, but does not float, sway, hop,
+ * wobble or look around on its own.
  *
  * Mount states (data-state): static (poster only) → loading → ready, or error (poster stays).
  */
@@ -77,7 +79,10 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const setState = (s) => { mount.dataset.state = s; };
-  if (reduceMotion) { setState("static"); return; }
+  // Calm mode (reduced motion): no body movement of its own; eyes, gentle head turns and blinks stay.
+  const calm = reduceMotion;
+  const bodyMotion = calm ? 0 : 1;
+  if (calm) BEHAVIOUR.hopKick = BEHAVIOUR.nodKick = BEHAVIOUR.wobbleKick = 0;
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const damp = (cur, tgt, lambda, dt) => cur + (tgt - cur) * (1 - Math.exp(-lambda * dt));
@@ -208,7 +213,7 @@
     // Curious after fast movement or when the cursor has just left; on touch, now and then.
     if (pointer.speed > BEHAVIOUR.curiousSpeed) b.curiousUntil = Math.max(b.curiousUntil, t + BEHAVIOUR.curiousHold);
     if (pointer.justLeft) { pointer.justLeft = false; b.curiousUntil = t + BEHAVIOUR.searchAfterLeave; }
-    if (!finePointer && (b.nextLook -= dt) <= 0) { b.curiousUntil = t + rand(1.2, 2); b.nextLook = rand(8, 14); }
+    if (!finePointer && !calm && (b.nextLook -= dt) <= 0) { b.curiousUntil = t + rand(1.2, 2); b.nextLook = rand(8, 14); }
     pointer.speed = damp(pointer.speed, 0, 6, dt);
 
     b.engaged = damp(b.engaged, active ? 1 : 0, active ? 4 : 1.6, dt);
@@ -311,7 +316,8 @@
       squint: clamp(b.squint * (1 - startle) + wink * 0.3, 0, 1),
       pupil: clamp(b.pupil - startle * 0.4, 0, 1),
       converge: Math.max(b.hover, b.joy * 0.6),
-      floatY: Math.sin(b.floatPhase), sway: Math.sin((t / BEHAVIOUR.swayPeriod) * Math.PI * 2 + 0.7),
+      floatY: Math.sin(b.floatPhase) * bodyMotion,
+      sway: Math.sin((t / BEHAVIOUR.swayPeriod) * Math.PI * 2 + 0.7) * bodyMotion,
       hop: b.hop.x, squash: clamp(b.hop.v * 0.12, -1, 1),
     });
     return pose;
